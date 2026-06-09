@@ -91,15 +91,15 @@
   .card .more { font-family: var(--mono); font-size: 11.5px; color: var(--blue); font-weight: 600; margin-top: 12px; display: inline-block; }
 
   /* Technique modal */
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(20,24,31,0.5); backdrop-filter: blur(3px); z-index: 100; display: none; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(20,24,31,0.5); backdrop-filter: blur(3px); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px 20px; }
   .modal-backdrop.open { display: flex; }
-  .modal { background: var(--surface); border-radius: 18px; max-width: 720px; width: 100%; box-shadow: 0 20px 60px rgba(20,24,31,0.25); overflow: hidden; }
-  .modal-head { padding: 24px 28px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .modal { background: var(--surface); border-radius: 18px; max-width: 720px; width: 100%; box-shadow: 0 20px 60px rgba(20,24,31,0.25); overflow: hidden; display: flex; flex-direction: column; max-height: calc(100vh - 48px); }
+  .modal-head { padding: 22px 28px 16px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-shrink: 0; }
   .modal-head .mh-num { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); font-weight: 600; }
-  .modal-head h3 { font-size: 23px; margin-top: 4px; letter-spacing: -0.02em; }
+  .modal-head h3 { font-size: 22px; margin-top: 4px; letter-spacing: -0.02em; }
   .modal-close { background: var(--bg); border: 1px solid var(--line); width: 34px; height: 34px; border-radius: 9px; cursor: pointer; font-size: 17px; color: var(--ink-soft); flex-shrink: 0; line-height: 1; }
   .modal-close:hover { border-color: var(--red); color: var(--red); }
-  .modal-body { padding: 24px 28px 28px; }
+  .modal-body { padding: 22px 28px 28px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .chart-box { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 22px; }
   .chart-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; padding: 0 4px; }
   .chart-legend span { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); display: flex; align-items: center; gap: 5px; }
@@ -226,6 +226,12 @@
     .term { grid-template-columns: 1fr; gap: 4px; }
     .nav-links { display: none; }
     .table-wrap { overflow-x: auto; }
+    .rules-3 { grid-template-columns: 1fr; }
+    .modal-backdrop { padding: 12px; }
+    .modal { max-height: calc(100vh - 24px); }
+    .modal-head { padding: 18px 20px 14px; }
+    .modal-head h3 { font-size: 19px; }
+    .modal-body { padding: 18px 20px 22px; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto; } }
 </style>
@@ -409,7 +415,7 @@
         <span class="lang-uz">Hali savdo yo'q. Birinchi savdongizni yuqorida qo'shing.</span>
         <span class="lang-en">No trades yet. Add your first trade above.</span>
       </div>
-      <p class="storage-note lang-uz">Ma'lumotlar shu brauzerда saqlanadi (boshqa qurilmaга o'tmaydi). Tozalash uchun har savdo yonidagi ✕ ni bosing.</p>
+      <p class="storage-note lang-uz">Ma'lumotlar shu brauzerda saqlanadi (boshqa qurilmaga o'tmaydi). Tozalash uchun har savdo yonidagi ✕ ni bosing.</p>
       <p class="storage-note lang-en">Data is stored in this browser (not synced across devices). Use the ✕ next to a trade to delete it.</p>
     </div>
   </section>
@@ -430,7 +436,7 @@
     <p class="eyebrow">06 — <span class="lang-uz">Test</span><span class="lang-en">Quiz</span></p>
     <h2 class="lang-uz">O'zingizni sinang</h2>
     <h2 class="lang-en">Test yourself</h2>
-    <p class="section-intro lang-uz">Bilimingizni mustahkamlang. Har savolда bitta to'g'ri javob.</p>
+    <p class="section-intro lang-uz">Bilimingizni mustahkamlang. Har savolda bitta to'g'ri javob.</p>
     <p class="section-intro lang-en">Reinforce what you've learned. One correct answer per question.</p>
     <div class="panel">
       <div class="quiz-q" id="quizQ"></div>
@@ -558,31 +564,31 @@
   // ===== Techniques (detailed) =====
   const techniques = [
     {num:'01',risk:'low',
-      uz:['VWAP Bounce','Uptrendда narx VWAP\'ga qaytib, undan qaytganда kirish.'],
+      uz:['VWAP Bounce','Uptrendda narx VWAP\'ga qaytib, undan qaytganda kirish.'],
       en:['VWAP Bounce','In an uptrend, enter when price pulls back to VWAP and bounces off it.'],
       chart:{candles:[[99,99.6,98.8,99.5],[99.5,100.2,99.4,100.1],[100.1,100.8,100,100.7],[100.7,101,100.3,100.5],[100.5,100.7,99.9,100],[100,100.2,99.5,99.7],[99.7,100.6,99.6,100.5],[100.5,101.3,100.4,101.2],[101.2,101.9,101,101.8],[101.8,102.8,101.7,102.7]],
         line:[98.9,99.1,99.25,99.4,99.5,99.55,99.6,99.7,99.85,100],lineColor:'#1F5FA8',lineDash:'5 3',lineLabel:'VWAP',
         markers:[{i:6,price:100.5,type:'entry',label:'Kirish 100.5'},{i:5,price:99.4,type:'sl',label:'SL 99.4'},{i:9,price:102.7,type:'tp',label:'TP 102.7'}]},
-      entry:['VWAP\'ga tushib, bounce qiluvchi bullish sham yopilganда','When a bullish candle closes after bouncing off VWAP'],
+      entry:['VWAP\'ga tushib, bounce qiluvchi bullish sham yopilganda','When a bullish candle closes after bouncing off VWAP'],
       sl:['Swing low / VWAP ostidan biroz past','Just below the swing low / VWAP'],
       tp:['Oldingi cho\'qqi yoki R:R 1:2','The prior high or R:R 1:2'],
-      example:['AAPL uptrendда, VWAP ≈ 99.6. Narx VWAP\'ga tushadi, bullish sham <b>100.5</b> da yopiladi → kirish. SL <b>99.4</b> (risk 1.1). TP <b>102.7</b> (1:2).','AAPL uptrend, VWAP ≈ 99.6. Price dips to VWAP, a bullish candle closes at <b>100.5</b> → entry. SL <b>99.4</b> (risk 1.1). TP <b>102.7</b> (1:2).'],
-      mistake:['VWAP\'ni teshib o\'tayotганда, tasdiq shamисиз kirish (tushayotган pichoqни ushlash).','Entering before a confirmation candle while price is slicing through VWAP (catching a falling knife).']},
+      example:['AAPL uptrendda, VWAP ≈ 99.6. Narx VWAP\'ga tushadi, bullish sham <b>100.5</b> da yopiladi → kirish. SL <b>99.4</b> (risk 1.1). TP <b>102.7</b> (1:2).','AAPL uptrend, VWAP ≈ 99.6. Price dips to VWAP, a bullish candle closes at <b>100.5</b> → entry. SL <b>99.4</b> (risk 1.1). TP <b>102.7</b> (1:2).'],
+      mistake:['VWAP\'ni teshib o\'tayotganda, tasdiq shamisiz kirish (tushayotgan pichoqni ushlash).','Entering before a confirmation candle while price is slicing through VWAP (catching a falling knife).']},
 
     {num:'02',risk:'low',
-      uz:['EMA20 Pullback','Kuchli uptrendда narx ko\'tarilayotган EMA20\'ga tegib qaytганда kirish.'],
+      uz:['EMA20 Pullback','Kuchli uptrendda narx ko\'tarilayotgan EMA20\'ga tegib qaytganda kirish.'],
       en:['EMA20 Pullback','In a strong uptrend, enter when price retraces to the rising EMA20 and bounces.'],
       chart:{candles:[[50,50.5,49.8,50.4],[50.4,51,50.3,50.9],[50.9,51.4,50.7,51.1],[51.1,51.3,50.6,50.8],[50.8,51,50.4,50.6],[50.6,51.2,50.5,51.1],[51.1,51.7,51,51.6],[51.6,52.1,51.4,52],[52,52.6,51.9,52.5]],
         line:[49.9,50.2,50.4,50.5,50.55,50.6,50.8,51,51.3],lineColor:'#B07A14',lineDash:'0',lineLabel:'EMA20',
         markers:[{i:5,price:51.1,type:'entry',label:'Kirish 51.1'},{i:4,price:50.3,type:'sl',label:'SL 50.3'},{i:8,price:52.5,type:'tp',label:'TP 52.5'}]},
-      entry:['EMA20\'ga tegib qaytган yashil sham yopilganда','When a green candle closes off the EMA20 touch'],
+      entry:['EMA20\'ga tegib qaytgan yashil sham yopilganda','When a green candle closes off the EMA20 touch'],
       sl:['EMA20 / swing low ostidan','Below the EMA20 / swing low'],
       tp:['Trend davomi yoki R:R 1:2','Trend continuation or R:R 1:2'],
-      example:['NVDA kuchli trendда. Narx EMA20 (≈50.6)ga tushadi, yashil sham <b>51.1</b> da yopiladi → kirish. SL <b>50.3</b> (risk 0.8). TP <b>52.7</b> (1:2).','NVDA in a strong trend. Price dips to EMA20 (≈50.6), a green candle closes at <b>51.1</b> → entry. SL <b>50.3</b> (risk 0.8). TP <b>52.7</b> (1:2).'],
-      mistake:['EMA20\'ни yon (sideways/choppy) bozorда ishlatish — u yerда signal ishonchsiz.','Using EMA20 in a choppy/sideways market — the signal is unreliable there.']},
+      example:['NVDA kuchli trendda. Narx EMA20 (≈50.6)ga tushadi, yashil sham <b>51.1</b> da yopiladi → kirish. SL <b>50.3</b> (risk 0.8). TP <b>52.7</b> (1:2).','NVDA in a strong trend. Price dips to EMA20 (≈50.6), a green candle closes at <b>51.1</b> → entry. SL <b>50.3</b> (risk 0.8). TP <b>52.7</b> (1:2).'],
+      mistake:['EMA20\'ni yon (sideways/choppy) bozorda ishlatish — u yerda signal ishonchsiz.','Using EMA20 in a choppy/sideways market — the signal is unreliable there.']},
 
     {num:'03',risk:'mid',
-      uz:['S/R Zona Bounce','Narx sinab ko\'rilgan support zonaga yetиб, undan qaytганда kirish.'],
+      uz:['S/R Zona Bounce','Narx sinab ko\'rilgan support zonaga yetib, undan qaytganda kirish.'],
       en:['S/R Zone Bounce','Enter when price reaches a tested support zone and reverses.'],
       chart:{candles:[[103,103.2,102.4,102.6],[102.6,102.8,101.9,102.1],[102.1,102.3,101.3,101.5],[101.5,101.6,100.7,100.9],[100.9,101,100.4,100.6],[100.6,101.5,100.5,101.4],[101.4,102.1,101.3,102],[102,102.7,101.9,102.6],[102.6,103.3,102.5,103.2]],
         zones:[{from:100.3,to:101,color:'#1A8A66',label:'Support zona'}],
@@ -594,76 +600,76 @@
       mistake:['Zonani aniq chiziq deb qarash va SL\'ni zona ichiga juda yaqin qo\'yish → stop hunt sizni urib chiqaradi.','Treating the zone as an exact line and placing the SL too tight inside it → a stop hunt knocks you out.']},
 
     {num:'04',risk:'mid',
-      uz:['ORB — Opening Range Breakout','Ertalabki birinchi 15–30 daqiqa oralig\'ini (high/low) sindirганда kirish.'],
+      uz:['ORB — Opening Range Breakout','Ertalabki birinchi 15–30 daqiqa oralig\'ini (high/low) sindirganda kirish.'],
       en:['ORB — Opening Range Breakout','Enter when price breaks the first 15–30 min opening range (its high/low).'],
       chart:{candles:[[100,100.6,99.7,100.4],[100.4,100.8,99.9,100.1],[100.1,100.7,99.8,100.5],[100.5,100.8,100,100.2],[100.2,100.7,100.1,100.6],[100.6,101.4,100.5,101.3],[101.3,101.9,101.2,101.8],[101.8,102.4,101.6,102.3]],
         levels:[{price:100.8,color:'#1F5FA8',label:'Range High'},{price:99.7,color:'#9AA3B2',label:'Range Low'}],
         markers:[{i:5,price:101,type:'entry',label:'Kirish 101'},{i:4,price:100,type:'sl',label:'SL 100'},{i:7,price:102.3,type:'tp',label:'TP 102.3'}]},
-      entry:['Range high\'ni volume bilan sindirib o\'tганда (long)','When price breaks the range high with volume (long)'],
+      entry:['Range high\'ni volume bilan sindirib o\'tganda (long)','When price breaks the range high with volume (long)'],
       sl:['Range ichiga (o\'rtasi yoki teskari tomon)','Inside the range (mid or opposite side)'],
       tp:['Range balandligini proyeksiya qilish yoki 1:2','Project the range height, or 1:2'],
       example:['Birinchi 30 daq: high <b>100.8</b>, low <b>99.7</b>. Narx <b>101</b> da volume bilan sindiradi → kirish. SL <b>100</b>. TP <b>102.3</b> (range balandligi ≈1.1 × 1.2).','First 30 min: high <b>100.8</b>, low <b>99.7</b>. Price breaks <b>101</b> with volume → entry. SL <b>100</b>. TP <b>102.3</b> (range height ≈1.1 projected).'],
-      mistake:['Har sindirишда kirish (volume tasdiqисиз) — ko\'p ORB sindirishlари fakeout bo\'ladi.','Trading every break without volume confirmation — many ORB breaks are fakeouts.']},
+      mistake:['Har sindirishda kirish (volume tasdiqisiz) — ko\'p ORB sindirishlari fakeout bo\'ladi.','Trading every break without volume confirmation — many ORB breaks are fakeouts.']},
 
     {num:'05',risk:'mid',
-      uz:['Breakout + Retest','Daraja sindirilgach, narx qaytib o\'sha darajani test qilганда (endi support) kirish.'],
+      uz:['Breakout + Retest','Daraja sindirilgach, narx qaytib o\'sha darajani test qilganda (endi support) kirish.'],
       en:['Breakout + Retest','After a level breaks, enter when price returns to retest it (now support).'],
       chart:{candles:[[99.5,99.8,99.1,99.3],[99.3,99.7,99,99.6],[99.6,100.1,99.5,100],[100,101,99.9,100.9],[100.9,101.2,100.4,100.6],[100.6,100.8,100.1,100.3],[100.3,100.9,100.2,100.8],[100.8,101.6,100.7,101.5],[101.5,102.2,101.4,102.1]],
         levels:[{price:100.1,color:'#1F5FA8',label:'Sindirilgan daraja'}],
         markers:[{i:6,price:100.4,type:'entry',label:'Kirish 100.4'},{i:5,price:99.9,type:'sl',label:'SL 99.9'},{i:8,price:102.1,type:'tp',label:'TP 102.1'}]},
-      entry:['Retestда narx darajaдан qaytган tasdiq shami','A confirmation candle as price bounces off the retest'],
+      entry:['Retestda narx darajadan qaytgan tasdiq shami','A confirmation candle as price bounces off the retest'],
       sl:['Retest pastligi / daraja ostidan','Below the retest low / the level'],
       tp:['O\'lchangan harakat yoki R:R 1:2','Measured move or R:R 1:2'],
-      example:['Resistance <b>100.1</b> sindiriladi. Narx qaytib <b>100.3</b> gача test qiladi, qaytadi → kirish <b>100.4</b>. SL <b>99.9</b>. TP <b>102.1</b> (1:2+).','Resistance <b>100.1</b> breaks. Price returns to retest <b>100.3</b>, bounces → entry <b>100.4</b>. SL <b>99.9</b>. TP <b>102.1</b> (1:2+).'],
-      mistake:['Birinchi sindирish shamиni quvib kirish (chasing) — retest\'ни kutmaslik ko\'pincha cho\'qqида kirишга olib keladi.','Chasing the first breakout candle instead of waiting for the retest — often means buying the top.']},
+      example:['Resistance <b>100.1</b> sindiriladi. Narx qaytib <b>100.3</b> gacha test qiladi, qaytadi → kirish <b>100.4</b>. SL <b>99.9</b>. TP <b>102.1</b> (1:2+).','Resistance <b>100.1</b> breaks. Price returns to retest <b>100.3</b>, bounces → entry <b>100.4</b>. SL <b>99.9</b>. TP <b>102.1</b> (1:2+).'],
+      mistake:['Birinchi sindirish shamini quvib kirish (chasing) — retest\'ni kutmaslik ko\'pincha cho\'qqida kirishga olib keladi.','Chasing the first breakout candle instead of waiting for the retest — often means buying the top.']},
 
     {num:'06',risk:'high',
-      uz:['Momentum / Gap-and-Go','Kuchli yangilik/gap bilan ochilган harakatга qo\'shilish. Tez va volatil.'],
+      uz:['Momentum / Gap-and-Go','Kuchli yangilik/gap bilan ochilgan harakatga qo\'shilish. Tez va volatil.'],
       en:['Momentum / Gap-and-Go','Ride a strong move opened by news or a gap. Fast and volatile.'],
       chart:{candles:[[98,98.3,97.8,98.1],[98.1,98.4,97.9,98.2],[101,101.8,100.8,101.6],[101.6,102.5,101.5,102.4],[102.4,103.2,102.2,103.1],[103.1,103.9,103,103.8],[103.8,104.5,103.6,104.4]],
         levels:[{price:101.8,color:'#1F5FA8',label:'Premarket high'}],
         markers:[{i:2,price:101.8,type:'entry',label:'Kirish 101.8'},{i:2,price:100.7,type:'sl',label:'SL 100.7'},{i:6,price:104.4,type:'tp',label:'TP scale out'}]},
-      entry:['Premarket / birinchi sham high\'ni sindирганда','On a break of the premarket / first-candle high'],
+      entry:['Premarket / birinchi sham high\'ni sindirganda','On a break of the premarket / first-candle high'],
       sl:['Qattiq — kirish shami ostiga','Tight — below the entry candle'],
       tp:['Tez scale out (bo\'lib oling)','Scale out quickly (take partials)'],
-      example:['Aksiya yangilik bilan 98→101 gача gap. Premarket high <b>101.8</b> sindiriladi → kirish. SL <b>100.7</b> (qattiq). Foyda tez bo\'lib olinadi (scale out).','Stock gaps 98→101 on news. Premarket high <b>101.8</b> breaks → entry. SL <b>100.7</b> (tight). Take profits quickly (scale out).'],
-      mistake:['Yuqori volatилликда katta pozitsiya olish yoki cho\'zilган harakatни quvish. Kichik hajm + qattiq SL.','Taking a big position in high volatility or chasing an extended move. Use small size + a tight SL.']},
+      example:['Aksiya yangilik bilan 98→101 gacha gap. Premarket high <b>101.8</b> sindiriladi → kirish. SL <b>100.7</b> (qattiq). Foyda tez bo\'lib olinadi (scale out).','Stock gaps 98→101 on news. Premarket high <b>101.8</b> breaks → entry. SL <b>100.7</b> (tight). Take profits quickly (scale out).'],
+      mistake:['Yuqori volatillikda katta pozitsiya olish yoki cho\'zilgan harakatni quvish. Kichik hajm + qattiq SL.','Taking a big position in high volatility or chasing an extended move. Use small size + a tight SL.']},
 
     {num:'07',risk:'mid',
-      uz:['Multi-Timeframe','Katta TF (H1/H4) trendни belgilaydi, kichik TF (M5/M15) aniq kirишni beradi.'],
+      uz:['Multi-Timeframe','Katta TF (H1/H4) trendni belgilaydi, kichik TF (M5/M15) aniq kirishni beradi.'],
       en:['Multi-Timeframe','The higher TF (H1/H4) sets the trend; the lower TF (M5/M15) times the entry.'],
       chart:{candles:[[50,50.6,49.8,50.5],[50.5,51.2,50.4,51.1],[51.1,51.5,50.7,50.9],[50.9,51.1,50.4,50.6],[50.6,51.3,50.5,51.2],[51.2,51.9,51.1,51.8],[51.8,52.5,51.7,52.4],[52.4,53.1,52.3,53]],
         line:[49.8,50.2,50.5,50.5,50.7,51,51.4,51.8],lineColor:'#1F5FA8',lineLabel:'H1 trend',
         markers:[{i:3,price:50.5,type:'entry',label:'M5 kirish'},{i:3,price:50,type:'sl',label:'SL'},{i:7,price:53,type:'tp',label:'TP'}]},
-      entry:['Kichik TF setup katta TF trendи bilan bir yo\'nalишда','A lower-TF setup aligned with the higher-TF trend'],
-      sl:['Kichik TF swing low ostиdan','Below the lower-TF swing low'],
-      tp:['Katta TF keyingi darajагача','Up to the next higher-TF level'],
-      example:['H1\'da uptrend (HH+HL). M5\'ga tushib, pullback tugaганини kutasiz — M5 bullish sham <b>50.5</b> da → kirish. Katta TF yo\'nalишда savdo.','H1 in an uptrend (HH+HL). Drop to M5, wait for the pullback to end — an M5 bullish candle at <b>50.5</b> → entry. Trading in the higher-TF direction.'],
-      mistake:['Kichik TF\'da katta TF trendига QARSHI kirish — "counter-trend tuzog\'i".','Entering on the lower TF AGAINST the higher-TF trend — the "counter-trend trap".']},
+      entry:['Kichik TF setup katta TF trendi bilan bir yo\'nalishda','A lower-TF setup aligned with the higher-TF trend'],
+      sl:['Kichik TF swing low ostidan','Below the lower-TF swing low'],
+      tp:['Katta TF keyingi darajagacha','Up to the next higher-TF level'],
+      example:['H1\'da uptrend (HH+HL). M5\'ga tushib, pullback tugaganini kutasiz — M5 bullish sham <b>50.5</b> da → kirish. Katta TF yo\'nalishda savdo.','H1 in an uptrend (HH+HL). Drop to M5, wait for the pullback to end — an M5 bullish candle at <b>50.5</b> → entry. Trading in the higher-TF direction.'],
+      mistake:['Kichik TF\'da katta TF trendiga QARSHI kirish — "counter-trend tuzog\'i".','Entering on the lower TF AGAINST the higher-TF trend — the "counter-trend trap".']},
 
     {num:'08',risk:'high',
-      uz:['Supply / Demand','Narx keskин ketган (yirik buyurtmалар to\'planган) zonalardан qaytишда kirish.'],
+      uz:['Supply / Demand','Narx keskin ketgan (yirik buyurtmalar to\'plangan) zonalardan qaytishda kirish.'],
       en:['Supply / Demand','Enter on reactions from zones where price moved away sharply (large orders clustered).'],
       chart:{candles:[[102,102.3,101.5,101.7],[101.7,101.9,100.9,101.1],[101.1,101.3,100.2,100.4],[100.4,100.6,100,100.5],[100.5,101.4,100.4,101.3],[101.3,102,101.2,101.9],[101.9,102.3,101.6,101.8],[101.8,102,101.5,101.6]],
         zones:[{from:100,to:100.6,color:'#1A8A66',label:'Demand'},{from:102,to:102.6,color:'#C0392F',label:'Supply'}],
         markers:[{i:4,price:101.3,type:'entry',label:'Kirish 101.3'},{i:3,price:99.9,type:'sl',label:'SL 99.9'},{i:5,price:102,type:'tp',label:'TP 102'}]},
-      entry:['Demand zonada (long) tasdiq bilan; supply zonaда (short)','At the demand zone (long) with confirmation; at supply (short)'],
+      entry:['Demand zonada (long) tasdiq bilan; supply zonada (short)','At the demand zone (long) with confirmation; at supply (short)'],
       sl:['Zona tashqarisiga','Beyond the zone'],
-      tp:['Qarama-qarshi zonагача','To the opposite zone'],
+      tp:['Qarama-qarshi zonagacha','To the opposite zone'],
       example:['Demand zona <b>100.0–100.6</b>, supply <b>102.0–102.6</b>. Narx demandga tushadi, qaytadi → kirish <b>101.3</b>. SL <b>99.9</b>. TP supply <b>102</b>.','Demand zone <b>100.0–100.6</b>, supply <b>102.0–102.6</b>. Price drops to demand, reverses → entry <b>101.3</b>. SL <b>99.9</b>. TP at supply <b>102</b>.'],
-      mistake:['Eskи, ko\'p marta sinalган zonани ishlatish — har test zonani zaiflashtiradi. Toza (fresh) zona kuchli.','Using a stale zone tested many times — each test weakens it. Fresh zones are stronger.']},
+      mistake:['Eski, ko\'p marta sinalgan zonani ishlatish — har test zonani zaiflashtiradi. Toza (fresh) zona kuchli.','Using a stale zone tested many times — each test weakens it. Fresh zones are stronger.']},
 
     {num:'09',risk:'mid',
-      uz:['Scaling Out','Bitta kirish, foydани bosqichма-bosqich olиш: TP1 / TP2 / trail.'],
+      uz:['Scaling Out','Bitta kirish, foydani bosqichma-bosqich olish: TP1 / TP2 / trail.'],
       en:['Scaling Out','One entry, taking profit in stages: TP1 / TP2 / trail.'],
       chart:{candles:[[100,100.4,99.8,100.3],[100.3,100.9,100.2,100.8],[100.8,101.4,100.7,101.3],[101.3,101.9,101.2,101.8],[101.8,102.5,101.7,102.4],[102.4,103.1,102.3,103],[103,103.7,102.9,103.6]],
         levels:[{price:101.2,color:'#1A8A66',label:'TP1 (50%)'},{price:102.2,color:'#1A8A66',label:'TP2 (25%)'},{price:103.4,color:'#1A8A66',label:'Trail (25%)'}],
         markers:[{i:0,price:100.1,type:'entry',label:'Kirish 100.1'},{i:0,price:99.4,type:'sl',label:'SL 99.4'}]},
-      entry:['Istalган texnika bilan (bu — chiqиш boshqaruvi)','With any technique (this is exit management)'],
-      sl:['Dastlаб oddiy SL, keyин break-even\'ga ko\'chиrish','Start with a normal SL, then move to break-even'],
-      tp:['50% TP1 (1:1) · 25% TP2 (1:2) · qolgан 25% trail','50% at TP1 (1:1) · 25% at TP2 (1:2) · trail the last 25%'],
-      example:['Kirish <b>100.1</b>, SL <b>99.4</b> (risk 0.7). TP1 <b>101.2</b> da 50% oling, SL\'ni break-even\'ga ko\'ching. TP2 <b>102.2</b> da yana 25%. Qolgан 25% — trend tugagunча trail.','Entry <b>100.1</b>, SL <b>99.4</b> (risk 0.7). Take 50% at TP1 <b>101.2</b>, move SL to break-even. Another 25% at TP2 <b>102.2</b>. Trail the last 25% until the trend ends.'],
-      mistake:['SL\'ni juda erta break-even\'ga ko\'chиб, shovqинда urilib chiqиш; yoki ochko\'zlik bilан hech qachон foyda olмаслик.','Moving SL to break-even too early and getting stopped on noise; or greed — never taking profit at all.']},
+      entry:['Istalgan texnika bilan (bu — chiqish boshqaruvi)','With any technique (this is exit management)'],
+      sl:['Dastlab oddiy SL, keyin break-even\'ga ko\'chirish','Start with a normal SL, then move to break-even'],
+      tp:['50% TP1 (1:1) · 25% TP2 (1:2) · qolgan 25% trail','50% at TP1 (1:1) · 25% at TP2 (1:2) · trail the last 25%'],
+      example:['Kirish <b>100.1</b>, SL <b>99.4</b> (risk 0.7). TP1 <b>101.2</b> da 50% oling, SL\'ni break-even\'ga ko\'ching. TP2 <b>102.2</b> da yana 25%. Qolgan 25% — trend tugaguncha trail.','Entry <b>100.1</b>, SL <b>99.4</b> (risk 0.7). Take 50% at TP1 <b>101.2</b>, move SL to break-even. Another 25% at TP2 <b>102.2</b>. Trail the last 25% until the trend ends.'],
+      mistake:['SL\'ni juda erta break-even\'ga ko\'chib, shovqinda urilib chiqish; yoki ochko\'zlik bilan hech qachon foyda olmaslik.','Moving SL to break-even too early and getting stopped on noise; or greed — never taking profit at all.']},
   ];
   function renderTech(){
     const l=lang();
@@ -725,7 +731,7 @@
     const be = (r+rw)>0 ? (r/(r+rw))*100 : 0;
     document.getElementById('beOut').textContent = be.toFixed(1)+'%';
     const rr = (rw/r).toFixed(1);
-    document.getElementById('beNote').textContent = `R:R 1:${rr} \u2014 demak savdolaringizning kamida ${be.toFixed(0)}% i yutuq bo'lsa, nolда qolasiz. Undan yuqori = foyda.`;
+    document.getElementById('beNote').textContent = `R:R 1:${rr} \u2014 demak savdolaringizning kamida ${be.toFixed(0)}% i yutuq bo'lsa, nolda qolasiz. Undan yuqori = foyda.`;
     document.getElementById('beNoteEn').textContent = `At R:R 1:${rr}, you need at least ${be.toFixed(0)}% of trades to win to break even. Above that = profit.`;
   }
   ['beRisk','beReward'].forEach(id=>document.getElementById(id).addEventListener('input',calcBE));
@@ -735,7 +741,7 @@
     {uz:['EMA stack to\'g\'ri','Narx > EMA20 > EMA50 > EMA200 (uptrend)'],en:['EMA stack aligned','Price > EMA20 > EMA50 > EMA200 (uptrend)']},
     {uz:['VWAP ustida','Narx VWAP\'dan yuqorida (kuchli tomon)'],en:['Above VWAP','Price is above VWAP (strong side)']},
     {uz:['RSI sog\'lom','RSI 50-75 oralig\'ida (kuchli, lekin ortiq emas)'],en:['Healthy RSI','RSI between 50-75 (strong, not overbought)']},
-    {uz:['Volume tasdiqi','Harakatда volume o\'rtachadan yuqori'],en:['Volume confirms','Volume above average on the move']},
+    {uz:['Volume tasdiqi','Harakatda volume o\'rtachadan yuqori'],en:['Volume confirms','Volume above average on the move']},
     {uz:['Sham namunasi','Bullish engulfing / pinbar / bounce shami'],en:['Candle pattern','Bullish engulfing / pinbar / bounce candle']},
     {uz:['Bozor regimi','SPY/QQQ siz tomon (long uchun bullish)'],en:['Market regime','SPY/QQQ on your side (bullish for longs)']},
     {uz:['Aniq R:R','Stop va target belgilangan, R:R \u2265 1:2'],en:['Clear R:R','Stop and target set, R:R \u2265 1:2']},
@@ -839,7 +845,7 @@
     {cat:'Risk', uz:['R:R','Risk/mukofot nisbati — kamida 1:2'], en:['R:R','Risk-to-reward — at least 1:2']},
     {cat:'Risk', uz:['Break-even win rate','R:R bo\'yicha foydaga chiqish uchun minimal yutuq foizi'], en:['Break-even win rate','Min win rate to break even at a given R:R']},
     {cat:'Risk', uz:['Profit factor','Jami yutuq ÷ jami zarar. 1 dan yuqori = foydali'], en:['Profit factor','Gross win ÷ gross loss. Above 1 = profitable']},
-    {cat:'Risk', uz:['Averaging down','Zararда qo\'shish — XAVFLI, qilmang'], en:['Averaging down','Adding to a loser — DANGEROUS']},
+    {cat:'Risk', uz:['Averaging down','Zararda qo\'shish — XAVFLI, qilmang'], en:['Averaging down','Adding to a loser — DANGEROUS']},
     {cat:'Risk', uz:['Drawdown','Hisobning eng yuqori nuqtadan tushishi'], en:['Drawdown','Drop from the account peak']},
     {cat:'Risk', uz:['Scaling in/out','Pozitsiyani bo\'lib ochish/yopish (TP1/TP2/TP3)'], en:['Scaling in/out','Entering/exiting in parts (TP1/TP2/TP3)']},
     {cat:'Bozor', uz:['SPY / QQQ','S&P 500 / Nasdaq 100 — bozor termometri'], en:['SPY / QQQ','S&P 500 / Nasdaq 100 — market thermometer']},
@@ -864,11 +870,11 @@
   // Quiz
   const quizData = [
     {uz:['Narx cho\'qqida. Nima qilasiz?',['Darrov long olaman','Pullback (EMA20/VWAP) kutaman','Ko\'proq sotib olaman','SL\'ni olib tashlayman'],1,'Cho\'qqida kirish = chasing. Pullback kuting.'],en:['Price at the top. What do you do?',['Go long now','Wait for a pullback','Buy more','Remove SL'],1,'Entering at the top is chasing. Wait for a pullback.']},
-    {uz:['Savdo zararда. To\'g\'ri harakat?',['Averaging down','SL\'ni pastga ko\'chiraman','SL\'ga tegsa chiqaman','SL\'ni olib tashlayman'],2,'Hech qachon zararда qo\'shmang yoki SL\'ni olib tashlamang.'],en:['Trade is losing. Correct move?',['Average down','Move SL lower','Exit if SL hit','Remove SL'],2,'Never average down or remove your SL.']},
+    {uz:['Savdo zararda. To\'g\'ri harakat?',['Averaging down','SL\'ni pastga ko\'chiraman','SL\'ga tegsa chiqaman','SL\'ni olib tashlayman'],2,'Hech qachon zararda qo\'shmang yoki SL\'ni olib tashlamang.'],en:['Trade is losing. Correct move?',['Average down','Move SL lower','Exit if SL hit','Remove SL'],2,'Never average down or remove your SL.']},
     {uz:['Engulfing haqiqiy bo\'lishi sharti?',['Faqat rang qarama-qarshi','Ikkinchi TANA birinchini qoplaydi','Fitillar bir xil','Volume past'],1,'Faqat tana hisoblanadi, fitil emas.'],en:['What makes engulfing valid?',['Opposite colors only','Second BODY covers first','Equal wicks','Low volume'],1,'Only the body counts, not wicks.']},
     {uz:['R:R 1:3 da break-even win rate qancha?',['~50%','~25%','~75%','~10%'],1,'1/(1+3)=25%. Yuqori R:R = past win rate yetarli.'],en:['Break-even win rate at R:R 1:3?',['~50%','~25%','~75%','~10%'],1,'1/(1+3)=25%. Higher R:R needs a lower win rate.']},
     {uz:['Long oldidan nimani tekshirasiz?',['Faqat narxni','SPY/QQQ yo\'nalishini','Eng arzon penny stock','Tungi yangilikni'],1,'Bozor (SPY/QQQ) yo\'nalishini tekshiring.'],en:['Before going long, check what?',['Just price','SPY/QQQ direction','Cheapest penny stock','Tonight\'s news'],1,'Check market direction (SPY/QQQ).']},
-    {uz:['Profit factor 1.5 nimani anglatadi?',['Har $1 zararга $1.5 yutuq','50% win rate','1.5 savdo/kun','R:R 1:1.5'],0,'Profit factor = jami yutuq ÷ jami zarar. 1 dan yuqori = foydali.'],en:['Profit factor 1.5 means?',['$1.5 won per $1 lost','50% win rate','1.5 trades/day','R:R 1:1.5'],0,'Profit factor = gross win ÷ gross loss. Above 1 = profitable.']},
+    {uz:['Profit factor 1.5 nimani anglatadi?',['Har $1 zararga $1.5 yutuq','50% win rate','1.5 savdo/kun','R:R 1:1.5'],0,'Profit factor = jami yutuq ÷ jami zarar. 1 dan yuqori = foydali.'],en:['Profit factor 1.5 means?',['$1.5 won per $1 lost','50% win rate','1.5 trades/day','R:R 1:1.5'],0,'Profit factor = gross win ÷ gross loss. Above 1 = profitable.']},
   ];
   let qIdx=0,qAnswered=false;
   function renderQuiz(){
@@ -895,7 +901,7 @@
     ['R:R kamida 1:2 bo\'lsin','Keep R:R at least 1:2'],
     ['Trendga qarshi savdo qilmang','Never trade against the trend'],
     ['Cho\'qqida kirmang — pullback kuting','Don\'t chase the top — wait for a pullback'],
-    ['Bir vaqtда bitta pozitsiya','One position at a time'],
+    ['Bir vaqtda bitta pozitsiya','One position at a time'],
     ['Likvid aksiya savdo qiling, penny stock emas','Trade liquid stocks, not penny stocks'],
     ['Kun oxirida pozitsiyani yoping — gap xavfi','Close before the day ends — gap risk'],
     ['Har savdoni jurnalga yozing','Log every trade in your journal'],
