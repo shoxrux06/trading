@@ -3,25 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trading Maktabi · Shoxrux</title>
+<title>Trading Maktabi · Pro</title>
 <style>
   :root {
-    --bg: #FBFAF7;
-    --surface: #FFFFFF;
-    --ink: #14181F;
-    --ink-soft: #5A6473;
-    --ink-faint: #9AA3B2;
-    --line: #E7E4DD;
-    --blue: #1F5FA8;
-    --blue-deep: #163E6E;
-    --blue-soft: #EAF1F9;
-    --green: #1A8A66;
-    --green-soft: #E3F3ED;
-    --red: #C0392F;
-    --red-soft: #FBEAE8;
-    --amber: #B07A14;
-    --amber-soft: #FAF1DD;
-    --radius: 14px;
+    --bg: #FBFAF7; --surface: #FFFFFF; --ink: #14181F; --ink-soft: #5A6473; --ink-faint: #9AA3B2;
+    --line: #E7E4DD; --blue: #1F5FA8; --blue-deep: #163E6E; --blue-soft: #EAF1F9;
+    --green: #1A8A66; --green-soft: #E3F3ED; --red: #C0392F; --red-soft: #FBEAE8;
+    --amber: #B07A14; --amber-soft: #FAF1DD; --radius: 14px;
     --shadow: 0 1px 2px rgba(20,24,31,0.04), 0 8px 24px rgba(20,24,31,0.05);
     --mono: 'SF Mono', ui-monospace, 'Cascadia Code', Menlo, monospace;
     --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -30,119 +18,161 @@
   html { scroll-behavior: smooth; }
   body { background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
 
-  /* ===== Header ===== */
-  header {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(251,250,247,0.85); backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--line);
-  }
-  .nav { max-width: 1100px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  header { position: sticky; top: 0; z-index: 50; background: rgba(251,250,247,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  .nav { max-width: 1100px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.02em; font-size: 17px; }
   .brand .tick { width: 26px; height: 26px; border-radius: 7px; background: var(--blue); position: relative; flex-shrink: 0; }
   .brand .tick::after { content: ''; position: absolute; inset: 6px 5px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: skewX(-12deg); }
-  .nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
-  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 13.5px; font-weight: 500; padding: 6px 11px; border-radius: 8px; transition: all .15s; }
+  .nav-links { display: flex; gap: 2px; flex-wrap: wrap; }
+  .nav-links a { color: var(--ink-soft); text-decoration: none; font-size: 13px; font-weight: 500; padding: 6px 9px; border-radius: 8px; transition: all .15s; }
   .nav-links a:hover { background: var(--blue-soft); color: var(--blue-deep); }
-  .lang-toggle { display: flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; flex-shrink: 0; }
-  .lang-toggle button { border: none; background: var(--surface); padding: 6px 12px; font-size: 12.5px; font-weight: 600; cursor: pointer; color: var(--ink-soft); font-family: var(--sans); }
+  .nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .clock { font-family: var(--mono); font-size: 11.5px; text-align: right; line-height: 1.3; }
+  .clock .status { font-weight: 700; }
+  .clock .status.open { color: var(--green); }
+  .clock .status.closed { color: var(--red); }
+  .clock .ny { color: var(--ink-faint); }
+  .lang-toggle { display: flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+  .lang-toggle button { border: none; background: var(--surface); padding: 6px 11px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--ink-soft); font-family: var(--sans); }
   .lang-toggle button.active { background: var(--blue); color: #fff; }
 
-  /* ===== Layout ===== */
   main { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-  section { padding: 56px 0; border-bottom: 1px solid var(--line); }
+  section { padding: 54px 0; border-bottom: 1px solid var(--line); }
   .eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); font-weight: 600; margin-bottom: 12px; }
-  h2 { font-size: clamp(26px, 4vw, 38px); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 10px; font-weight: 700; }
-  h3 { font-size: 19px; letter-spacing: -0.01em; margin-bottom: 8px; font-weight: 650; }
-  .section-intro { color: var(--ink-soft); max-width: 620px; margin-bottom: 36px; font-size: 15.5px; }
+  h2 { font-size: clamp(25px, 3.6vw, 36px); letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 10px; font-weight: 700; }
+  h3 { font-size: 18px; letter-spacing: -0.01em; margin-bottom: 8px; font-weight: 650; }
+  .section-intro { color: var(--ink-soft); max-width: 640px; margin-bottom: 32px; font-size: 15px; }
 
-  /* ===== Hero ===== */
-  .hero { padding: 72px 0 64px; border-bottom: 1px solid var(--line); }
-  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
-  .hero h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.02; letter-spacing: -0.04em; font-weight: 750; margin-bottom: 20px; }
+  .hero { padding: 64px 0 56px; border-bottom: 1px solid var(--line); }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 44px; align-items: center; }
+  .hero h1 { font-size: clamp(32px, 5.4vw, 56px); line-height: 1.03; letter-spacing: -0.04em; font-weight: 750; margin-bottom: 18px; }
   .hero h1 .accent { color: var(--blue); }
-  .hero p.lead { font-size: 17px; color: var(--ink-soft); max-width: 460px; margin-bottom: 28px; }
+  .hero p.lead { font-size: 16.5px; color: var(--ink-soft); max-width: 470px; margin-bottom: 26px; }
   .hero-cta { display: flex; gap: 12px; flex-wrap: wrap; }
   .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 20px; border-radius: 10px; font-weight: 600; font-size: 14.5px; text-decoration: none; cursor: pointer; border: none; font-family: var(--sans); transition: all .15s; }
   .btn-primary { background: var(--blue); color: #fff; }
   .btn-primary:hover { background: var(--blue-deep); }
   .btn-ghost { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
   .btn-ghost:hover { border-color: var(--blue); color: var(--blue); }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+  .btn-danger { background: var(--red-soft); color: var(--red); border: 1px solid transparent; }
+  .btn-danger:hover { border-color: var(--red); }
 
-  /* Hero ticker card */
   .ticker-card { background: var(--ink); border-radius: 18px; padding: 24px; color: #fff; box-shadow: var(--shadow); }
   .ticker-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
-  .ticker-head .sym { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+  .ticker-head .sym { font-weight: 700; font-size: 18px; }
   .ticker-head .tf { font-family: var(--mono); font-size: 11px; color: #8b95a5; }
   .ticker-price { font-family: var(--mono); font-size: 30px; font-weight: 600; letter-spacing: -0.02em; }
   .ticker-chg { font-family: var(--mono); font-size: 13px; color: #3ddc97; margin-bottom: 18px; }
   .candles { display: flex; align-items: flex-end; gap: 7px; height: 110px; }
-  .candle { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; position: relative; }
+  .candle { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
   .candle .wick { width: 2px; background: currentColor; }
   .candle .body { width: 100%; border-radius: 2px; background: currentColor; }
-  .candle.up { color: #3ddc97; }
-  .candle.down { color: #f0635a; }
+  .candle.up { color: #3ddc97; } .candle.down { color: #f0635a; }
 
-  /* ===== Discipline banner ===== */
-  .discipline { background: var(--blue-deep); color: #fff; border-radius: var(--radius); padding: 28px 32px; display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
-  .discipline .big { font-size: 46px; font-weight: 750; letter-spacing: -0.03em; line-height: 1; font-family: var(--mono); }
+  .discipline { background: var(--blue-deep); color: #fff; border-radius: var(--radius); padding: 26px 30px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+  .discipline .big { font-size: 44px; font-weight: 750; letter-spacing: -0.03em; line-height: 1; font-family: var(--mono); }
   .discipline .big span { color: #8fc0f0; }
-  .discipline p { color: #cdddf0; font-size: 15px; max-width: 460px; }
+  .discipline p { color: #cdddf0; font-size: 14.5px; max-width: 470px; }
 
-  /* ===== Technique cards ===== */
   .grid { display: grid; gap: 16px; }
   .grid-2 { grid-template-columns: repeat(2, 1fr); }
   .grid-3 { grid-template-columns: repeat(3, 1fr); }
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; transition: all .18s; }
   .card:hover { box-shadow: var(--shadow); transform: translateY(-2px); border-color: #d8d3c8; }
   .card .num { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); font-weight: 600; }
-  .card h3 { margin-top: 6px; }
-  .card p { font-size: 14px; color: var(--ink-soft); }
+  .card h3 { margin-top: 6px; } .card p { font-size: 13.5px; color: var(--ink-soft); }
+  .card .detail { font-size: 12.5px; color: var(--ink-faint); margin-top: 10px; font-family: var(--mono); line-height: 1.5; }
   .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; margin-top: 12px; font-family: var(--mono); }
   .tag.low { background: var(--green-soft); color: var(--green); }
   .tag.mid { background: var(--amber-soft); color: var(--amber); }
   .tag.high { background: var(--red-soft); color: var(--red); }
 
-  /* ===== Calculator ===== */
-  .calc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
-  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 24px; }
-  .field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
-  .field input { width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 9px; font-size: 15px; font-family: var(--mono); background: var(--bg); color: var(--ink); transition: border .15s; }
-  .field input:focus { outline: none; border-color: var(--blue); background: #fff; }
-  .calc-out { margin-top: 24px; padding: 22px; background: var(--blue-soft); border-radius: var(--radius); display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; text-align: center; }
-  .calc-out .item .v { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--blue-deep); letter-spacing: -0.02em; }
-  .calc-out .item .l { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
-  .calc-note { font-size: 12.5px; color: var(--ink-faint); margin-top: 14px; text-align: center; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); }
+  .panel + .panel { margin-top: 20px; }
+  .panel-title { font-size: 16px; font-weight: 650; margin-bottom: 4px; }
+  .panel-sub { font-size: 13px; color: var(--ink-soft); margin-bottom: 20px; }
 
-  /* ===== Glossary ===== */
-  .glossary-search { width: 100%; padding: 13px 16px; border: 1px solid var(--line); border-radius: 11px; font-size: 15px; margin-bottom: 20px; font-family: var(--sans); background: var(--surface); }
+  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 22px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink-soft); margin-bottom: 6px; }
+  .field input, .field select { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; font-size: 14.5px; font-family: var(--mono); background: var(--bg); color: var(--ink); }
+  .field input:focus, .field select:focus { outline: none; border-color: var(--blue); background: #fff; }
+  .calc-out { margin-top: 22px; padding: 20px; background: var(--blue-soft); border-radius: var(--radius); display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; text-align: center; }
+  .calc-out .item .v { font-family: var(--mono); font-size: 23px; font-weight: 700; color: var(--blue-deep); letter-spacing: -0.02em; }
+  .calc-out .item .l { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+  .calc-note { font-size: 12px; color: var(--ink-faint); margin-top: 12px; text-align: center; }
+
+  /* Break-even */
+  .be-out { margin-top: 20px; text-align: center; padding: 22px; background: var(--green-soft); border-radius: var(--radius); }
+  .be-out .v { font-family: var(--mono); font-size: 34px; font-weight: 750; color: var(--green); }
+  .be-out .l { font-size: 13px; color: var(--ink-soft); }
+
+  /* Confluence / checklist */
+  .check-list { display: grid; gap: 8px; }
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; cursor: pointer; transition: all .15s; background: var(--bg); }
+  .check-item:hover { border-color: var(--blue); }
+  .check-item.on { background: var(--green-soft); border-color: var(--green); }
+  .check-box { width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--ink-faint); flex-shrink: 0; margin-top: 1px; position: relative; transition: all .15s; }
+  .check-item.on .check-box { background: var(--green); border-color: var(--green); }
+  .check-item.on .check-box::after { content: ''; position: absolute; inset: 3px 4px; border-left: 2px solid #fff; border-bottom: 2px solid #fff; transform: rotate(-45deg) translateY(-1px); }
+  .check-item .txt { font-size: 13.5px; }
+  .check-item .txt b { display: block; color: var(--ink); }
+  .check-item .txt span { font-size: 12px; color: var(--ink-soft); }
+  .score-bar { margin-top: 20px; padding: 18px 20px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .score-bar.go { background: var(--green-soft); }
+  .score-bar.wait { background: var(--amber-soft); }
+  .score-bar.no { background: var(--red-soft); }
+  .score-num { font-family: var(--mono); font-size: 30px; font-weight: 750; }
+  .score-bar.go .score-num { color: var(--green); }
+  .score-bar.wait .score-num { color: var(--amber); }
+  .score-bar.no .score-num { color: var(--red); }
+  .score-verdict { font-weight: 650; font-size: 15px; }
+
+  /* Trade journal */
+  .journal-form { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; align-items: end; }
+  .journal-form .field input, .journal-form .field select { padding: 9px 10px; font-size: 13px; }
+  .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 22px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; text-align: center; }
+  .stat .v { font-family: var(--mono); font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+  .stat .l { font-size: 11.5px; color: var(--ink-soft); margin-top: 2px; }
+  .stat .v.pos { color: var(--green); } .stat .v.neg { color: var(--red); }
+  table.journal { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table.journal th { text-align: left; padding: 10px 8px; border-bottom: 2px solid var(--line); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); font-family: var(--mono); }
+  table.journal td { padding: 11px 8px; border-bottom: 1px solid var(--line); font-family: var(--mono); }
+  table.journal td.sym { font-weight: 700; font-family: var(--sans); }
+  table.journal .pnl.pos { color: var(--green); } table.journal .pnl.neg { color: var(--red); }
+  table.journal .dir { font-size: 11px; padding: 2px 7px; border-radius: 5px; font-weight: 600; }
+  table.journal .dir.long { background: var(--green-soft); color: var(--green); }
+  table.journal .dir.short { background: var(--red-soft); color: var(--red); }
+  .del-btn { background: none; border: none; color: var(--ink-faint); cursor: pointer; font-size: 16px; padding: 2px 6px; border-radius: 5px; }
+  .del-btn:hover { background: var(--red-soft); color: var(--red); }
+  .journal-empty { text-align: center; padding: 36px; color: var(--ink-faint); font-size: 14px; }
+  .storage-note { font-size: 12px; color: var(--ink-faint); margin-top: 14px; }
+
+  .glossary-search { width: 100%; padding: 12px 16px; border: 1px solid var(--line); border-radius: 11px; font-size: 15px; margin-bottom: 20px; font-family: var(--sans); background: var(--surface); }
   .glossary-search:focus { outline: none; border-color: var(--blue); }
-  .term { border-bottom: 1px solid var(--line); padding: 14px 4px; display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: baseline; }
-  .term:last-child { border-bottom: none; }
-  .term dt { font-weight: 650; font-size: 15px; color: var(--ink); }
-  .term dt .cat { display: block; font-family: var(--mono); font-size: 10.5px; color: var(--blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
-  .term dd { font-size: 14px; color: var(--ink-soft); }
+  .term { border-bottom: 1px solid var(--line); padding: 13px 4px; display: grid; grid-template-columns: 200px 1fr; gap: 20px; align-items: baseline; }
+  .term dt { font-weight: 650; font-size: 14.5px; }
+  .term dt .cat { display: block; font-family: var(--mono); font-size: 10px; color: var(--blue); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 3px; }
+  .term dd { font-size: 13.5px; color: var(--ink-soft); }
   .term.hidden { display: none; }
 
-  /* ===== Quiz ===== */
-  .quiz { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
-  .quiz-q { font-size: 18px; font-weight: 650; margin-bottom: 18px; letter-spacing: -0.01em; }
+  .quiz-q { font-size: 17px; font-weight: 650; margin-bottom: 18px; }
   .quiz-opts { display: grid; gap: 10px; }
-  .quiz-opt { text-align: left; padding: 13px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); cursor: pointer; font-size: 14.5px; font-family: var(--sans); color: var(--ink); transition: all .15s; }
+  .quiz-opt { text-align: left; padding: 12px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); cursor: pointer; font-size: 14px; font-family: var(--sans); color: var(--ink); transition: all .15s; }
   .quiz-opt:hover { border-color: var(--blue); background: #fff; }
   .quiz-opt.correct { background: var(--green-soft); border-color: var(--green); color: var(--green); font-weight: 600; }
   .quiz-opt.wrong { background: var(--red-soft); border-color: var(--red); color: var(--red); }
   .quiz-opt:disabled { cursor: default; }
   .quiz-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
   .quiz-progress { font-family: var(--mono); font-size: 13px; color: var(--ink-faint); }
-  .quiz-explain { margin-top: 16px; padding: 14px 16px; background: var(--blue-soft); border-radius: 10px; font-size: 13.5px; color: var(--blue-deep); display: none; }
+  .quiz-explain { margin-top: 16px; padding: 14px 16px; background: var(--blue-soft); border-radius: 10px; font-size: 13px; color: var(--blue-deep); display: none; }
   .quiz-explain.show { display: block; }
 
-  /* ===== Rules ===== */
-  .rules { display: grid; gap: 12px; }
-  .rule { display: flex; gap: 14px; align-items: flex-start; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+  .rules { display: grid; gap: 10px; }
+  .rule { display: flex; gap: 14px; align-items: flex-start; padding: 15px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
   .rule .n { font-family: var(--mono); font-size: 13px; font-weight: 700; color: #fff; background: var(--blue); width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .rule p { font-size: 14.5px; }
-  .rule p b { color: var(--ink); }
+  .rule p { font-size: 14px; } .rule p b { color: var(--ink); }
 
   footer { text-align: center; padding: 40px 24px 60px; color: var(--ink-faint); font-size: 13px; }
   footer .brand { justify-content: center; margin-bottom: 10px; opacity: 0.6; }
@@ -150,17 +180,18 @@
   .lang-en { display: none; }
   body.en .lang-uz { display: none; }
   body.en .lang-en { display: revert; }
-  body.en .term { display: grid; }
-  body.en .term.hidden { display: none; }
+  body.en .term { display: grid; } body.en .term.hidden { display: none; }
 
-  @media (max-width: 760px) {
-    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+  @media (max-width: 820px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 30px; }
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
     .calc-grid { grid-template-columns: 1fr; }
-    .calc-out { grid-template-columns: 1fr; gap: 14px; }
+    .calc-out { grid-template-columns: 1fr; }
+    .journal-form { grid-template-columns: 1fr 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
     .term { grid-template-columns: 1fr; gap: 4px; }
     .nav-links { display: none; }
-    .discipline .big { font-size: 36px; }
+    .table-wrap { overflow-x: auto; }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto; } }
 </style>
@@ -172,32 +203,35 @@
     <div class="brand"><span class="tick"></span> Trading Maktabi</div>
     <nav class="nav-links">
       <a href="#techniques"><span class="lang-uz">Texnikalar</span><span class="lang-en">Techniques</span></a>
-      <a href="#calc"><span class="lang-uz">Kalkulyator</span><span class="lang-en">Calculator</span></a>
+      <a href="#tools"><span class="lang-uz">Vositalar</span><span class="lang-en">Tools</span></a>
+      <a href="#checklist"><span class="lang-uz">Checklist</span><span class="lang-en">Checklist</span></a>
+      <a href="#journal"><span class="lang-uz">Jurnal</span><span class="lang-en">Journal</span></a>
       <a href="#glossary"><span class="lang-uz">Lug'at</span><span class="lang-en">Glossary</span></a>
       <a href="#quiz"><span class="lang-uz">Test</span><span class="lang-en">Quiz</span></a>
-      <a href="#rules"><span class="lang-uz">Qoidalar</span><span class="lang-en">Rules</span></a>
     </nav>
-    <div class="lang-toggle">
-      <button id="btn-uz" class="active" onclick="setLang('uz')">UZ</button>
-      <button id="btn-en" onclick="setLang('en')">EN</button>
+    <div class="nav-right">
+      <div class="clock" id="clock"><div class="status" id="clockStatus">—</div><div class="ny" id="clockNy">NY —</div></div>
+      <div class="lang-toggle">
+        <button id="btn-uz" class="active" onclick="setLang('uz')">UZ</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
     </div>
   </div>
 </header>
 
 <main>
 
-  <!-- HERO -->
   <div class="hero">
     <div class="hero-grid">
       <div>
-        <p class="eyebrow">Shaxsiy ma'lumotnoma · Personal reference</p>
+        <p class="eyebrow">Pro trader toolkit · <span class="lang-uz">o'rganish + amaliyot</span><span class="lang-en">learn + practice</span></p>
         <h1 class="lang-uz">Intizom <span class="accent">savdoni</span> yutadi, texnika emas.</h1>
         <h1 class="lang-en"><span class="accent">Discipline</span> wins trades, not technique.</h1>
-        <p class="lead lang-uz">Bu — mening day trading yo'lim: texnikalar, atamalar, kalkulyator va testlar. Hammasi bitta joyda, o'zim uchun.</p>
-        <p class="lead lang-en">My day-trading playbook: techniques, terms, a position calculator, and quizzes. All in one place, built for myself.</p>
+        <p class="lead lang-uz">Texnikalar, interaktiv vositalar, confluence skoreri va savdo jurnali — yangi boshlovchidan tajribali traderga qadar. Hammasi bir joyda.</p>
+        <p class="lead lang-en">Techniques, interactive tools, a confluence scorer, and a trade journal — from beginner to seasoned trader. All in one place.</p>
         <div class="hero-cta">
-          <a href="#techniques" class="btn btn-primary"><span class="lang-uz">Texnikalardan boshlash</span><span class="lang-en">Start with techniques</span></a>
-          <a href="#calc" class="btn btn-ghost"><span class="lang-uz">Pozitsiya kalkulyatori</span><span class="lang-en">Position calculator</span></a>
+          <a href="#journal" class="btn btn-primary"><span class="lang-uz">Savdo jurnali</span><span class="lang-en">Trade journal</span></a>
+          <a href="#tools" class="btn btn-ghost"><span class="lang-uz">Vositalar</span><span class="lang-en">Tools</span></a>
         </div>
       </div>
       <div class="ticker-card">
@@ -209,12 +243,11 @@
     </div>
   </div>
 
-  <!-- DISCIPLINE -->
   <section style="border-bottom:1px solid var(--line);">
     <div class="discipline">
       <div class="big">80<span>/</span>20</div>
-      <p class="lang-uz"><b style="color:#fff;">Intizom 80%, texnika 20%.</b> Eng zo'r texnikani bilsangiz ham, intizomingiz bo'lmasa — yo'qotasiz. O'rtacha texnika + temir intizom = foyda.</p>
-      <p class="lang-en"><b style="color:#fff;">80% discipline, 20% technique.</b> You can know the best setup and still lose without discipline. Average technique plus iron discipline beats the reverse.</p>
+      <p class="lang-uz"><b style="color:#fff;">Intizom 80%, texnika 20%.</b> Eng zo'r texnikani bilsangiz ham, intizomingiz bo'lmasa — yo'qotasiz. Jurnal yuriting, qoidaga rioya qiling, statistikangizni o'lchang.</p>
+      <p class="lang-en"><b style="color:#fff;">80% discipline, 20% technique.</b> The best setup still loses without discipline. Keep a journal, follow your rules, measure your stats.</p>
     </div>
   </section>
 
@@ -223,19 +256,24 @@
     <p class="eyebrow">01 — <span class="lang-uz">Texnikalar</span><span class="lang-en">Techniques</span></p>
     <h2 class="lang-uz">Savdo texnikalari</h2>
     <h2 class="lang-en">Trading techniques</h2>
-    <p class="section-intro lang-uz">Har bir texnika — kirish, stop loss va maqsadning aniq qoidalari bilan. Yashil = past xavf (boshlash uchun), sariq = o'rta, qizil = yuqori xavf.</p>
-    <p class="section-intro lang-en">Each technique has clear rules for entry, stop loss, and target. Green = low risk (start here), amber = medium, red = higher risk.</p>
+    <p class="section-intro lang-uz">Har biri aniq qoidalar bilan: kirish, stop, maqsad. Yashil = past xavf (boshlash uchun), sariq = o'rta, qizil = yuqori.</p>
+    <p class="section-intro lang-en">Each with clear rules: entry, stop, target. Green = low risk (start here), amber = medium, red = high.</p>
     <div class="grid grid-3" id="techCards"></div>
   </section>
 
-  <!-- CALCULATOR -->
-  <section id="calc">
-    <p class="eyebrow">02 — <span class="lang-uz">Kalkulyator</span><span class="lang-en">Calculator</span></p>
-    <h2 class="lang-uz">Pozitsiya hajmi kalkulyatori</h2>
-    <h2 class="lang-en">Position size calculator</h2>
-    <p class="section-intro lang-uz">1% qoidasi: bir savdoda hisobingizning 1% idan ortig'ini risk qilmang. Raqamlarni kiriting — necha share olish va R:R avtomatik hisoblanadi.</p>
-    <p class="section-intro lang-en">The 1% rule: never risk more than 1% of your account on a single trade. Enter the numbers — share count and R:R are computed automatically.</p>
-    <div class="calc">
+  <!-- TOOLS -->
+  <section id="tools">
+    <p class="eyebrow">02 — <span class="lang-uz">Vositalar</span><span class="lang-en">Tools</span></p>
+    <h2 class="lang-uz">Trader kalkulyatorlari</h2>
+    <h2 class="lang-en">Trader calculators</h2>
+    <p class="section-intro lang-uz">Pozitsiya hajmi va break-even win rate — har savdodan oldin hisoblang.</p>
+    <p class="section-intro lang-en">Position size and break-even win rate — compute before every trade.</p>
+
+    <div class="panel">
+      <div class="panel-title lang-uz">Pozitsiya hajmi kalkulyatori</div>
+      <div class="panel-title lang-en">Position size calculator</div>
+      <div class="panel-sub lang-uz">1% qoidasi: bir savdoda hisobning 1% idan ortig'ini risk qilmang.</div>
+      <div class="panel-sub lang-en">The 1% rule: never risk more than 1% of the account on one trade.</div>
       <div class="calc-grid">
         <div class="field"><label class="lang-uz">Hisob balansi ($)</label><label class="lang-en">Account balance ($)</label><input type="number" id="acc" value="50000"></div>
         <div class="field"><label class="lang-uz">Risk foizi (%)</label><label class="lang-en">Risk per trade (%)</label><input type="number" id="risk" value="1" step="0.1"></div>
@@ -244,33 +282,123 @@
       </div>
       <div class="calc-out">
         <div class="item"><div class="v" id="oShares">—</div><div class="l lang-uz">Shares (dona)</div><div class="l lang-en">Shares</div></div>
-        <div class="item"><div class="v" id="oRisk">—</div><div class="l lang-uz">Risk ($)</div><div class="l lang-en">Risk ($)</div></div>
-        <div class="item"><div class="v" id="oTp">—</div><div class="l lang-uz">Take profit (R:R 1:2)</div><div class="l lang-en">Take profit (1:2)</div></div>
+        <div class="item"><div class="v" id="oRisk">—</div><div class="l">Risk ($)</div></div>
+        <div class="item"><div class="v" id="oTp">—</div><div class="l lang-uz">Take profit (1:2)</div><div class="l lang-en">Take profit (1:2)</div></div>
       </div>
-      <p class="calc-note lang-uz">Hisob: pozitsiya = (balans × risk%) ÷ (kirish − stop). TP = kirish + 2× risk masofasi (long uchun).</p>
-      <p class="calc-note lang-en">Formula: shares = (balance × risk%) ÷ (entry − stop). TP = entry + 2× the risk distance (for longs).</p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title lang-uz">Break-even win rate kalkulyatori</div>
+      <div class="panel-title lang-en">Break-even win rate calculator</div>
+      <div class="panel-sub lang-uz">R:R nisbatingizda foydaga chiqish uchun minimal yutuq foizi. Pro tushuncha: yuqori R:R bilan past win rate ham foydali.</div>
+      <div class="panel-sub lang-en">The minimum win rate to break even at your R:R. Pro insight: a high R:R is profitable even with a low win rate.</div>
+      <div class="calc-grid">
+        <div class="field"><label class="lang-uz">Risk (1 birlik)</label><label class="lang-en">Risk (1 unit)</label><input type="number" id="beRisk" value="1" step="0.1"></div>
+        <div class="field"><label class="lang-uz">Reward (mukofot)</label><label class="lang-en">Reward</label><input type="number" id="beReward" value="2" step="0.1"></div>
+      </div>
+      <div class="be-out">
+        <div class="v" id="beOut">—</div>
+        <div class="l lang-uz">Foydaga chiqish uchun kerakli minimal win rate</div>
+        <div class="l lang-en">Minimum win rate needed to break even</div>
+      </div>
+      <p class="calc-note lang-uz" id="beNote"></p>
+      <p class="calc-note lang-en" id="beNoteEn"></p>
+    </div>
+  </section>
+
+  <!-- CONFLUENCE + PRE-TRADE CHECKLIST -->
+  <section id="checklist">
+    <p class="eyebrow">03 — <span class="lang-uz">Checklist</span><span class="lang-en">Checklist</span></p>
+    <h2 class="lang-uz">Confluence skoreri</h2>
+    <h2 class="lang-en">Confluence scorer</h2>
+    <p class="section-intro lang-uz">Savdodan oldin nechta shart bajarilganini belgilang. 4+ ball — kuchli savdo. 4 dan kam — kutib turing.</p>
+    <p class="section-intro lang-en">Tick how many conditions are met before a trade. 4+ is a strong setup. Below 4 — wait.</p>
+
+    <div class="panel">
+      <div class="check-list" id="confList"></div>
+      <div class="score-bar wait" id="confScore">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="score-num" id="confNum">0/7</span>
+          <span class="score-verdict" id="confVerdict"></span>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="resetConf()"><span class="lang-uz">Tozalash</span><span class="lang-en">Reset</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRADE JOURNAL -->
+  <section id="journal">
+    <p class="eyebrow">04 — <span class="lang-uz">Savdo jurnali</span><span class="lang-en">Trade journal</span></p>
+    <h2 class="lang-uz">Savdo jurnali va statistika</h2>
+    <h2 class="lang-en">Trade journal & stats</h2>
+    <p class="section-intro lang-uz">Har savdoni yozing — win rate, profit factor, P&L avtomatik hisoblanadi. Ma'lumotlar shu qurilmada saqlanadi.</p>
+    <p class="section-intro lang-en">Log every trade — win rate, profit factor, and P&L are computed automatically. Data is saved on this device.</p>
+
+    <div class="stats-row">
+      <div class="stat"><div class="v" id="stTotal">0</div><div class="l lang-uz">Savdolar</div><div class="l lang-en">Trades</div></div>
+      <div class="stat"><div class="v" id="stWin">—</div><div class="l lang-uz">Win rate</div><div class="l lang-en">Win rate</div></div>
+      <div class="stat"><div class="v" id="stPnl">$0</div><div class="l lang-uz">Jami P&L</div><div class="l lang-en">Total P&L</div></div>
+      <div class="stat"><div class="v" id="stPf">—</div><div class="l lang-uz">Profit factor</div><div class="l lang-en">Profit factor</div></div>
+      <div class="stat"><div class="v" id="stAvg">—</div><div class="l lang-uz">O'rt. R (yutuq/zarar)</div><div class="l lang-en">Avg win/loss</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title lang-uz">Yangi savdo qo'shish</div>
+      <div class="panel-title lang-en">Add a trade</div>
+      <div class="panel-sub lang-uz">P&L avtomatik: (chiqish − kirish) × shares × (long: +1, short: −1).</div>
+      <div class="panel-sub lang-en">P&L is automatic: (exit − entry) × shares × (long: +1, short: −1).</div>
+      <div class="journal-form">
+        <div class="field"><label class="lang-uz">Aksiya</label><label class="lang-en">Symbol</label><input type="text" id="jSym" placeholder="AAPL"></div>
+        <div class="field"><label class="lang-uz">Yo'nalish</label><label class="lang-en">Direction</label><select id="jDir"><option value="long">Long</option><option value="short">Short</option></select></div>
+        <div class="field"><label class="lang-uz">Kirish</label><label class="lang-en">Entry</label><input type="number" id="jEntry" step="0.01" placeholder="200.50"></div>
+        <div class="field"><label class="lang-uz">Chiqish</label><label class="lang-en">Exit</label><input type="number" id="jExit" step="0.01" placeholder="203.50"></div>
+        <div class="field"><label class="lang-uz">Shares</label><label class="lang-en">Shares</label><input type="number" id="jShares" placeholder="100"></div>
+        <div class="field"><button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="addTrade()"><span class="lang-uz">Qo'shish</span><span class="lang-en">Add</span></button></div>
+      </div>
+    </div>
+
+    <div class="panel" style="margin-top:20px;">
+      <div class="table-wrap">
+        <table class="journal">
+          <thead><tr>
+            <th class="lang-uz">Sana</th><th class="lang-en" style="display:none;">Date</th>
+            <th class="lang-uz">Aksiya</th><th class="lang-en" style="display:none;">Symbol</th>
+            <th class="lang-uz">Yo'n.</th><th class="lang-en" style="display:none;">Dir</th>
+            <th class="lang-uz">Kirish</th><th class="lang-en" style="display:none;">Entry</th>
+            <th class="lang-uz">Chiqish</th><th class="lang-en" style="display:none;">Exit</th>
+            <th>Shares</th><th>P&L</th><th></th>
+          </tr></thead>
+          <tbody id="journalBody"></tbody>
+        </table>
+      </div>
+      <div class="journal-empty" id="journalEmpty">
+        <span class="lang-uz">Hali savdo yo'q. Birinchi savdongizni yuqorida qo'shing.</span>
+        <span class="lang-en">No trades yet. Add your first trade above.</span>
+      </div>
+      <p class="storage-note lang-uz">Ma'lumotlar shu brauzerда saqlanadi (boshqa qurilmaга o'tmaydi). Tozalash uchun har savdo yonidagi ✕ ni bosing.</p>
+      <p class="storage-note lang-en">Data is stored in this browser (not synced across devices). Use the ✕ next to a trade to delete it.</p>
     </div>
   </section>
 
   <!-- GLOSSARY -->
   <section id="glossary">
-    <p class="eyebrow">03 — <span class="lang-uz">Lug'at</span><span class="lang-en">Glossary</span></p>
+    <p class="eyebrow">05 — <span class="lang-uz">Lug'at</span><span class="lang-en">Glossary</span></p>
     <h2 class="lang-uz">Atamalar lug'ati</h2>
     <h2 class="lang-en">Glossary of terms</h2>
-    <p class="section-intro lang-uz">Qidirish uchun yozing. Barcha o'rgangan atamalar — toifalar bo'yicha.</p>
-    <p class="section-intro lang-en">Type to search. Every term you've learned, grouped by category.</p>
+    <p class="section-intro lang-uz">Qidirish uchun yozing. Asosiy va ilg'or atamalar.</p>
+    <p class="section-intro lang-en">Type to search. Core and advanced terms.</p>
     <input type="text" class="glossary-search" id="glossarySearch" placeholder="Qidirish... / Search...">
     <dl id="glossaryList"></dl>
   </section>
 
   <!-- QUIZ -->
   <section id="quiz">
-    <p class="eyebrow">04 — <span class="lang-uz">Test</span><span class="lang-en">Quiz</span></p>
+    <p class="eyebrow">06 — <span class="lang-uz">Test</span><span class="lang-en">Quiz</span></p>
     <h2 class="lang-uz">O'zingizni sinang</h2>
     <h2 class="lang-en">Test yourself</h2>
     <p class="section-intro lang-uz">Bilimingizni mustahkamlang. Har savolда bitta to'g'ri javob.</p>
     <p class="section-intro lang-en">Reinforce what you've learned. One correct answer per question.</p>
-    <div class="quiz">
+    <div class="panel">
       <div class="quiz-q" id="quizQ"></div>
       <div class="quiz-opts" id="quizOpts"></div>
       <div class="quiz-explain" id="quizExplain"></div>
@@ -283,11 +411,11 @@
 
   <!-- RULES -->
   <section id="rules" style="border-bottom:none;">
-    <p class="eyebrow">05 — <span class="lang-uz">Qoidalar</span><span class="lang-en">Rules</span></p>
+    <p class="eyebrow">07 — <span class="lang-uz">Qoidalar</span><span class="lang-en">Rules</span></p>
     <h2 class="lang-uz">10 ta oltin qoida</h2>
     <h2 class="lang-en">10 golden rules</h2>
-    <p class="section-intro lang-uz">Har savdodan oldin o'qing. Bular xatolardan tug'ilgan.</p>
-    <p class="section-intro lang-en">Read before every trade. Forged from mistakes.</p>
+    <p class="section-intro lang-uz">Har savdodan oldin o'qing.</p>
+    <p class="section-intro lang-en">Read before every trade.</p>
     <div class="rules" id="rulesList"></div>
   </section>
 
@@ -295,163 +423,274 @@
 
 <footer>
   <div class="brand"><span class="tick"></span> Trading Maktabi</div>
-  <p class="lang-uz">Shaxsiy ma'lumotnoma · O'zingiz uchun qurilgan · Hech kimga investitsiya maslahati emas</p>
-  <p class="lang-en">Personal reference · Built for yourself · Not investment advice for anyone</p>
+  <p class="lang-uz">Pro trader toolkit · Ta'lim maqsadida · Investitsiya maslahati emas</p>
+  <p class="lang-en">Pro trader toolkit · For education · Not investment advice</p>
 </footer>
 
 <script>
-  // ===== Language =====
   function setLang(l){
     document.body.classList.toggle('en', l==='en');
     document.documentElement.lang = l;
     document.getElementById('btn-uz').classList.toggle('active', l==='uz');
     document.getElementById('btn-en').classList.toggle('active', l==='en');
-    renderTech(); renderGlossary(filterVal); renderQuiz(); renderRules();
+    document.querySelectorAll('table.journal th').forEach(th=>{
+      if(th.classList.contains('lang-uz')) th.style.display = l==='uz'?'':'none';
+      if(th.classList.contains('lang-en')) th.style.display = l==='en'?'':'none';
+    });
+    renderTech(); renderGlossary(filterVal); renderQuiz(); renderRules(); renderConf(); calcBE(); renderJournal();
   }
-  let lang = () => document.body.classList.contains('en') ? 'en' : 'uz';
+  const lang = () => document.body.classList.contains('en') ? 'en' : 'uz';
 
-  // ===== Hero candles =====
+  // Market clock (NY time)
+  function updateClock(){
+    try {
+      const now = new Date();
+      const ny = new Date(now.toLocaleString('en-US',{timeZone:'America/New_York'}));
+      const h = ny.getHours(), m = ny.getMinutes(), day = ny.getDay();
+      const hhmm = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+      const mins = h*60+m;
+      const isWeekday = day>=1 && day<=5;
+      const open = isWeekday && mins>=570 && mins<960; // 9:30-16:00
+      const st = document.getElementById('clockStatus');
+      const l = lang();
+      st.textContent = open ? (l==='uz'?'● Bozor ochiq':'● Market open') : (l==='uz'?'● Bozor yopiq':'● Market closed');
+      st.className = 'status ' + (open?'open':'closed');
+      document.getElementById('clockNy').textContent = 'NY '+hhmm;
+    } catch(e){}
+  }
+  setInterval(updateClock, 1000); 
+
   (function(){
     const data = [[60,'down'],[45,'down'],[70,'up'],[55,'up'],[40,'down'],[80,'up'],[65,'up'],[50,'down'],[90,'up'],[75,'up'],[85,'up'],[95,'up']];
     const el = document.getElementById('heroCandles');
-    data.forEach(([h,dir])=>{
-      const c = document.createElement('div'); c.className='candle '+dir;
-      const wick = Math.round(h*0.25), body = Math.round(h*0.7);
-      c.innerHTML = `<div class="wick" style="height:${wick}px"></div><div class="body" style="height:${body}px"></div><div class="wick" style="height:${Math.round(wick*0.6)}px"></div>`;
-      el.appendChild(c);
-    });
+    data.forEach(([h,dir])=>{ const c=document.createElement('div'); c.className='candle '+dir;
+      const w=Math.round(h*0.25), b=Math.round(h*0.7);
+      c.innerHTML=`<div class="wick" style="height:${w}px"></div><div class="body" style="height:${b}px"></div><div class="wick" style="height:${Math.round(w*0.6)}px"></div>`; el.appendChild(c); });
   })();
 
-  // ===== Techniques =====
+  // Techniques
   const techniques = [
-    { num:'01', risk:'low', uz:['VWAP Bounce','Uptrendда narx VWAP\'ga qaytib, undan qaytganda kirish. Tasdiqlovchi yashil sham kuting. SL — swing low ostiga. Boshlash uchun eng xavfsiz.'], en:['VWAP Bounce','In an uptrend, enter when price pulls back to VWAP and bounces. Wait for a confirming green candle. SL below the swing low. Safest to start with.'] },
-    { num:'02', risk:'low', uz:['EMA20 Pullback','Uptrendда narx EMA20\'ga tegib qaytganda kirish. Trend bilan birga. SL — EMA20 ostidan biroz past. Dinamik support.'], en:['EMA20 Pullback','In an uptrend, enter when price touches EMA20 and bounces. Trade with the trend. SL just below EMA20. Dynamic support.'] },
-    { num:'03', risk:'mid', uz:['Support/Resistance Bounce','Narx kuchli darajaga (zona) yetib qaytganda kirish. Zona — chiziq emas, oraliq. SL zona tashqarisiga.'], en:['Support/Resistance Bounce','Enter when price reaches a strong level (zone) and reverses. A zone is a range, not a line. SL outside the zone.'] },
-    { num:'04', risk:'mid', uz:['ORB (Opening Range Breakout)','Ertalabki birinchi 15-30 daqiqa oralig\'ini sindirganда kirish. Volume bilan tasdiqlang (fakeout xavfi).'], en:['ORB (Opening Range Breakout)','Enter when price breaks the first 15-30 min range. Confirm with volume (beware fakeouts).'] },
-    { num:'05', risk:'mid', uz:['Breakout + Retest','Daraja sindirilgach, qaytib test qilganda kirish. Retest fakeout\'dan himoya qiladi. Eng ishonchli breakout turi.'], en:['Breakout + Retest','After a level breaks, enter on the retest. The retest filters out fakeouts. The most reliable breakout variant.'] },
-    { num:'06', risk:'high', uz:['Momentum / Gap-and-Go','Yangilik/gap bilan kuchli harakatga qo\'shilish. Tez, lekin volatil. Tajriba talab qiladi.'], en:['Momentum / Gap-and-Go','Ride a strong move driven by news or a gap. Fast but volatile. Requires experience.'] },
+    {num:'01',risk:'low',uz:['VWAP Bounce','Uptrendда narx VWAP\'ga qaytib, qaytganda kirish.','Kirish: bounce shami · SL: swing low · TP: 1:2'],en:['VWAP Bounce','In an uptrend, enter when price pulls back to VWAP and bounces.','Entry: bounce candle · SL: swing low · TP: 1:2']},
+    {num:'02',risk:'low',uz:['EMA20 Pullback','Uptrendда narx EMA20\'ga tegib qaytganда kirish.','Kirish: yashil sham · SL: EMA20 ostidan · TP: 1:2'],en:['EMA20 Pullback','Enter when price touches EMA20 and bounces in an uptrend.','Entry: green candle · SL: below EMA20 · TP: 1:2']},
+    {num:'03',risk:'mid',uz:['S/R Zona Bounce','Kuchli daraja (zona)dan qaytganда kirish.','Zona = oraliq · SL: zona tashqarisiga · TP: keyingi zona'],en:['S/R Zone Bounce','Enter on a reversal from a strong level (zone).','Zone = a range · SL: outside zone · TP: next zone']},
+    {num:'04',risk:'mid',uz:['ORB','Ertalabki 15-30 daq oralig\'ini sindirish.','Volume bilan tasdiq · fakeout xavfi · faqat ochilishда'],en:['ORB','Break the first 15-30 min opening range.','Confirm with volume · fakeout risk · mornings only']},
+    {num:'05',risk:'mid',uz:['Breakout + Retest','Sindirilgach, retest\'da kirish — ishonchli.','Retest fakeout\'ni filtrlaydi · SL: retest ostiga'],en:['Breakout + Retest','Enter on the retest after a break — reliable.','Retest filters fakeouts · SL: below the retest']},
+    {num:'06',risk:'high',uz:['Momentum / Gap-and-Go','Yangilik/gap harakatiga qo\'shilish. Tajriba kerak.','Tez, volatil · qattiq SL · kichik pozitsiya'],en:['Momentum / Gap-and-Go','Ride a news/gap move. Needs experience.','Fast, volatile · tight SL · small size']},
+    {num:'07',risk:'mid',uz:['Multi-Timeframe','Katta TF trend + kichik TF kirish.','H1/H4: yo\'nalish · M5/M15: aniq kirish nuqtasi'],en:['Multi-Timeframe','Higher TF trend + lower TF entry.','H1/H4: direction · M5/M15: precise entry']},
+    {num:'08',risk:'high',uz:['Supply/Demand','Yirik buyurtmalar to\'plangan zonalar.','Demand: xaridorlar · Supply: sotuvchilar · toza zona kuchli'],en:['Supply/Demand','Zones where large orders cluster.','Demand: buyers · Supply: sellers · fresh zones are stronger']},
+    {num:'09',risk:'mid',uz:['Scaling Out','Foydani bo\'lib olish: TP1/TP2/TP3.','50% TP1 · 25% TP2 · qolgan trail · stressni kamaytiradi'],en:['Scaling Out','Take profit in parts: TP1/TP2/TP3.','50% at TP1 · 25% at TP2 · trail rest · lowers stress']},
   ];
   function renderTech(){
-    const l = lang();
+    const l=lang();
     document.getElementById('techCards').innerHTML = techniques.map(t=>{
-      const [title,desc] = t[l];
-      const tagTxt = t.risk==='low'?(l==='uz'?'Past xavf':'Low risk'):t.risk==='mid'?(l==='uz'?'O\'rta xavf':'Medium risk'):(l==='uz'?'Yuqori xavf':'High risk');
-      return `<div class="card"><div class="num">${t.num}</div><h3>${title}</h3><p>${desc}</p><span class="tag ${t.risk}">${tagTxt}</span></div>`;
+      const [title,desc,detail]=t[l];
+      const tg = t.risk==='low'?(l==='uz'?'Past xavf':'Low'):t.risk==='mid'?(l==='uz'?'O\'rta':'Medium'):(l==='uz'?'Yuqori':'High');
+      return `<div class="card"><div class="num">${t.num}</div><h3>${title}</h3><p>${desc}</p><div class="detail">${detail}</div><span class="tag ${t.risk}">${tg}</span></div>`;
     }).join('');
   }
 
-  // ===== Calculator =====
+  // Position calc
   function calc(){
-    const acc=+document.getElementById('acc').value, risk=+document.getElementById('risk').value,
-          entry=+document.getElementById('entry').value, stop=+document.getElementById('stop').value;
-    const riskAmt = acc*(risk/100), dist = Math.abs(entry-stop);
-    const shares = dist>0 ? Math.floor(riskAmt/dist) : 0;
-    const isLong = entry>stop;
-    const tp = isLong ? entry+dist*2 : entry-dist*2;
-    document.getElementById('oShares').textContent = shares>0?shares.toLocaleString():'—';
-    document.getElementById('oRisk').textContent = '$'+riskAmt.toFixed(0);
-    document.getElementById('oTp').textContent = dist>0?'$'+tp.toFixed(2):'—';
+    const acc=+document.getElementById('acc').value,risk=+document.getElementById('risk').value,
+          entry=+document.getElementById('entry').value,stop=+document.getElementById('stop').value;
+    const riskAmt=acc*(risk/100),dist=Math.abs(entry-stop);
+    const shares=dist>0?Math.floor(riskAmt/dist):0;
+    const tp=entry>stop?entry+dist*2:entry-dist*2;
+    document.getElementById('oShares').textContent=shares>0?shares.toLocaleString():'—';
+    document.getElementById('oRisk').textContent='$'+riskAmt.toFixed(0);
+    document.getElementById('oTp').textContent=dist>0?'$'+tp.toFixed(2):'—';
   }
   ['acc','risk','entry','stop'].forEach(id=>document.getElementById(id).addEventListener('input',calc));
 
-  // ===== Glossary =====
-  const glossary = [
-    {cat:'Sham/Candle', uz:['Candlestick','Sham — narx harakatini ko\'rsatadigan grafik (open, high, low, close)'], en:['Candlestick','A candle showing price action: open, high, low, close']},
-    {cat:'Sham/Candle', uz:['Open / Close','Sham boshlangan / tugagan narx. Yashil: close yuqorida. Qizil: close pastda'], en:['Open / Close','Price where the candle started / ended. Green: close on top. Red: close on bottom']},
-    {cat:'Sham/Candle', uz:['Wick (fitil)','Tanadan chiqib turgan ingichka chiziq — narx tegib qaytgan joy'], en:['Wick','The thin line beyond the body — where price reached then retreated']},
-    {cat:'Pattern', uz:['Engulfing','Yutuvchi sham: ikkinchi tana birinchini to\'liq qoplaydi. Reversal signali'], en:['Engulfing','The second body fully covers the first. A reversal signal']},
-    {cat:'Pattern', uz:['Pinbar','Uzun fitil + kichik tana = "yolg\'on harakat". Hammer / Shooting Star'], en:['Pinbar','Long wick + small body = a "false move". Hammer / Shooting Star']},
-    {cat:'Pattern', uz:['Doji','Juda kichik tana — bozorда muvozanat / pauza'], en:['Doji','A tiny body — market balance / a pause']},
-    {cat:'Indikator', uz:['EMA20','20 davrli eksponensial o\'rtacha — dinamik support'], en:['EMA20','20-period exponential moving average — dynamic support']},
-    {cat:'Indikator', uz:['VWAP','Hajm bilan o\'rtacha narx — institutsional benchmark, har kuni reset'], en:['VWAP','Volume weighted average price — institutional benchmark, resets daily']},
-    {cat:'Indikator', uz:['RSI','Kuch indeksi 0-100. 70+ ortiq sotib olingan, 30- ortiq sotilgan'], en:['RSI','Strength index 0-100. 70+ overbought, 30- oversold']},
-    {cat:'Indikator', uz:['ATR','Volatillik o\'lchovi — Stop Loss masofasini sozlash uchun'], en:['ATR','Volatility measure — used to size the stop loss distance']},
-    {cat:'Trend', uz:['Uptrend / Downtrend','Ko\'tarilish (HH+HL) / tushish (LH+LL)'], en:['Uptrend / Downtrend','Rising (HH+HL) / falling (LH+LL)']},
-    {cat:'Trend', uz:['Support / Resistance','Narxni ushlaydigan pol / to\'xtatadigan shift (zona sifatida qarang)'], en:['Support / Resistance','A floor that holds / a ceiling that caps (treat as zones)']},
-    {cat:'Trend', uz:['Zona','Narx reaksiya qiladigan oraliq — aniq chiziq emas, hudud'], en:['Zone','A range where price reacts — an area, not an exact line']},
-    {cat:'Harakat', uz:['Long / Short','Ko\'tarilishga / tushishga tikish'], en:['Long / Short','Betting on a rise / on a fall']},
-    {cat:'Harakat', uz:['Pullback','Trend davomidagi vaqtinchalik orqaga qaytish'], en:['Pullback','A temporary pause against the trend']},
-    {cat:'Harakat', uz:['Breakout','Darajani sindirib o\'tish (yorib chiqish)'], en:['Breakout','Price breaking through a level']},
-    {cat:'Harakat', uz:['Chasing','Cho\'qqida kirish — yomon. Pullback kuting'], en:['Chasing','Entering at the top — bad. Wait for a pullback']},
-    {cat:'Risk', uz:['Stop Loss','Zararni cheklash buyrug\'i. Hech qachon olib tashlamang'], en:['Stop Loss','An order that caps your loss. Never remove it']},
-    {cat:'Risk', uz:['R:R','Risk va mukofot nisbati — kamida 1:2'], en:['R:R','Risk-to-reward ratio — at least 1:2']},
-    {cat:'Risk', uz:['1% qoidasi','Bir savdoda hisobning maksimal 1% ini risk qilish'], en:['1% rule','Risk at most 1% of the account on one trade']},
-    {cat:'Risk', uz:['Averaging down','Zararда pozitsiyaga qo\'shish — XAVFLI, qilmang'], en:['Averaging down','Adding to a losing position — DANGEROUS, don\'t']},
-    {cat:'Risk', uz:['Drawdown','Hisobning eng yuqori nuqtadan tushishi'], en:['Drawdown','The drop from the account\'s peak']},
-    {cat:'Bozor', uz:['SPY / QQQ','S&P 500 (butun bozor) / Nasdaq 100 (tech). Bozor termometri'], en:['SPY / QQQ','S&P 500 (whole market) / Nasdaq 100 (tech). The market thermometer']},
-    {cat:'Bozor', uz:['Gap down','Kechagidan pastroq ochilish — Stop Loss ishlamaydi'], en:['Gap down','Opening lower than yesterday — a stop loss can\'t catch it']},
-    {cat:'Bozor', uz:['Overnight position','Tungi pozitsiya — gap xavfi'], en:['Overnight position','Holding overnight — gap risk']},
-    {cat:'Bozor', uz:['Liquid / Penny stock','Likvid: oson sotiladi (AAPL). Penny: arzon, xavfli'], en:['Liquid / Penny stock','Liquid: trades easily (AAPL). Penny: cheap, risky']},
-    {cat:'Bozor', uz:['Volatility','Narxning qancha tez/keskin o\'zgarishi'], en:['Volatility','How fast and sharply price moves']},
-    {cat:'Bozor', uz:['Stop hunt','Yiriklar SL\'larni ataylab ishga tushiradi, keyin narx qaytadi'], en:['Stop hunt','Big players trigger stops on purpose, then price reverses']},
-    {cat:'Mexanika', uz:['Bid / Ask / Spread','Xaridor narxi / sotuvchi narxi / ular orasidagi farq'], en:['Bid / Ask / Spread','Buyer price / seller price / the gap between them']},
-    {cat:'Mexanika', uz:['Volume','Savdo hajmi — qancha aksiya sotildi'], en:['Volume','Trading volume — how many shares traded']},
+  // Break-even win rate
+  function calcBE(){
+    const r=+document.getElementById('beRisk').value, rw=+document.getElementById('beReward').value;
+    const be = (r+rw)>0 ? (r/(r+rw))*100 : 0;
+    document.getElementById('beOut').textContent = be.toFixed(1)+'%';
+    const rr = (rw/r).toFixed(1);
+    document.getElementById('beNote').textContent = `R:R 1:${rr} \u2014 demak savdolaringizning kamida ${be.toFixed(0)}% i yutuq bo'lsa, nolда qolasiz. Undan yuqori = foyda.`;
+    document.getElementById('beNoteEn').textContent = `At R:R 1:${rr}, you need at least ${be.toFixed(0)}% of trades to win to break even. Above that = profit.`;
+  }
+  ['beRisk','beReward'].forEach(id=>document.getElementById(id).addEventListener('input',calcBE));
+
+  // Confluence checklist
+  const confItems = [
+    {uz:['EMA stack to\'g\'ri','Narx > EMA20 > EMA50 > EMA200 (uptrend)'],en:['EMA stack aligned','Price > EMA20 > EMA50 > EMA200 (uptrend)']},
+    {uz:['VWAP ustida','Narx VWAP\'dan yuqorida (kuchli tomon)'],en:['Above VWAP','Price is above VWAP (strong side)']},
+    {uz:['RSI sog\'lom','RSI 50-75 oralig\'ida (kuchli, lekin ortiq emas)'],en:['Healthy RSI','RSI between 50-75 (strong, not overbought)']},
+    {uz:['Volume tasdiqi','Harakatда volume o\'rtachadan yuqori'],en:['Volume confirms','Volume above average on the move']},
+    {uz:['Sham namunasi','Bullish engulfing / pinbar / bounce shami'],en:['Candle pattern','Bullish engulfing / pinbar / bounce candle']},
+    {uz:['Bozor regimi','SPY/QQQ siz tomon (long uchun bullish)'],en:['Market regime','SPY/QQQ on your side (bullish for longs)']},
+    {uz:['Aniq R:R','Stop va target belgilangan, R:R \u2265 1:2'],en:['Clear R:R','Stop and target set, R:R \u2265 1:2']},
   ];
-  let filterVal = '';
+  let confState = new Array(confItems.length).fill(false);
+  function renderConf(){
+    const l=lang();
+    document.getElementById('confList').innerHTML = confItems.map((c,i)=>{
+      const [t,d]=c[l];
+      return `<div class="check-item ${confState[i]?'on':''}" onclick="toggleConf(${i})"><div class="check-box"></div><div class="txt"><b>${t}</b><span>${d}</span></div></div>`;
+    }).join('');
+    updateConfScore();
+  }
+  function toggleConf(i){ confState[i]=!confState[i]; renderConf(); }
+  function resetConf(){ confState.fill(false); renderConf(); }
+  function updateConfScore(){
+    const n = confState.filter(Boolean).length, l=lang();
+    document.getElementById('confNum').textContent = n+'/7';
+    const bar = document.getElementById('confScore'), v=document.getElementById('confVerdict');
+    let cls, txt;
+    if(n>=5){ cls='go'; txt = l==='uz'?'Kuchli savdo \u2014 kirish mumkin':'Strong setup \u2014 you can enter'; }
+    else if(n>=4){ cls='go'; txt = l==='uz'?'Yetarli \u2014 ehtiyot bilan kiring':'Good enough \u2014 enter with care'; }
+    else if(n>=2){ cls='wait'; txt = l==='uz'?'Zaif \u2014 kuting, ko\'proq tasdiq toping':'Weak \u2014 wait for more confirmation'; }
+    else { cls='no'; txt = l==='uz'?'Kirmang \u2014 shart yetarli emas':'Don\'t enter \u2014 not enough conditions'; }
+    bar.className = 'score-bar '+cls; v.textContent = txt;
+  }
+
+  // ===== Trade Journal (localStorage with fallback) =====
+  let trades = [];
+  const STORE_KEY = 'tm_trades_v1';
+  function loadTrades(){
+    try { const raw = localStorage.getItem(STORE_KEY); trades = raw?JSON.parse(raw):[]; }
+    catch(e){ trades = window._memTrades || []; }
+  }
+  function saveTrades(){
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(trades)); }
+    catch(e){ window._memTrades = trades; }
+  }
+  function addTrade(){
+    const sym=document.getElementById('jSym').value.trim().toUpperCase();
+    const dir=document.getElementById('jDir').value;
+    const entry=+document.getElementById('jEntry').value;
+    const exit=+document.getElementById('jExit').value;
+    const shares=+document.getElementById('jShares').value;
+    if(!sym||!entry||!exit||!shares){ 
+      const l=lang(); alert(l==='uz'?'Iltimos barcha maydonlarni to\'ldiring.':'Please fill in all fields.'); return; 
+    }
+    const pnl = (exit-entry)*shares*(dir==='long'?1:-1);
+    trades.unshift({sym,dir,entry,exit,shares,pnl,date:new Date().toISOString().slice(5,10)});
+    saveTrades(); renderJournal();
+    ['jSym','jEntry','jExit','jShares'].forEach(id=>document.getElementById(id).value='');
+  }
+  function delTrade(i){ trades.splice(i,1); saveTrades(); renderJournal(); }
+  function renderJournal(){
+    const l=lang(), body=document.getElementById('journalBody'), empty=document.getElementById('journalEmpty');
+    if(trades.length===0){ body.innerHTML=''; empty.style.display='block'; }
+    else {
+      empty.style.display='none';
+      body.innerHTML = trades.map((t,i)=>{
+        const cls = t.pnl>=0?'pos':'neg';
+        const dirTxt = t.dir==='long'?'Long':'Short';
+        return `<tr><td>${t.date}</td><td class="sym">${t.sym}</td><td><span class="dir ${t.dir}">${dirTxt}</span></td><td>${t.entry}</td><td>${t.exit}</td><td>${t.shares}</td><td class="pnl ${cls}">${t.pnl>=0?'+':''}$${t.pnl.toFixed(2)}</td><td><button class="del-btn" onclick="delTrade(${i})" title="delete">\u2715</button></td></tr>`;
+      }).join('');
+    }
+    // stats
+    const n=trades.length;
+    const wins=trades.filter(t=>t.pnl>0), losses=trades.filter(t=>t.pnl<0);
+    const totalPnl=trades.reduce((s,t)=>s+t.pnl,0);
+    const grossWin=wins.reduce((s,t)=>s+t.pnl,0), grossLoss=Math.abs(losses.reduce((s,t)=>s+t.pnl,0));
+    const winRate = n>0 ? (wins.length/n*100) : 0;
+    const pf = grossLoss>0 ? (grossWin/grossLoss) : (grossWin>0?Infinity:0);
+    const avgWin = wins.length? grossWin/wins.length : 0;
+    const avgLoss = losses.length? grossLoss/losses.length : 0;
+    const avgRatio = avgLoss>0 ? (avgWin/avgLoss) : (avgWin>0?Infinity:0);
+    document.getElementById('stTotal').textContent = n;
+    document.getElementById('stWin').textContent = n>0?winRate.toFixed(0)+'%':'—';
+    const pnlEl=document.getElementById('stPnl');
+    pnlEl.textContent = (totalPnl>=0?'+$':'-$')+Math.abs(totalPnl).toFixed(0);
+    pnlEl.className = 'v '+(totalPnl>=0?'pos':'neg');
+    document.getElementById('stPf').textContent = n>0 ? (pf===Infinity?'∞':pf.toFixed(2)) : '—';
+    document.getElementById('stAvg').textContent = (wins.length&&losses.length) ? '1:'+avgRatio.toFixed(1) : (n>0?'—':'—');
+  }
+
+  // Glossary
+  const glossary = [
+    {cat:'Sham', uz:['Candlestick','Narx harakatini ko\'rsatadigan sham (OHLC)'], en:['Candlestick','A candle showing price action (OHLC)']},
+    {cat:'Sham', uz:['Wick (fitil)','Tanadan chiqib turgan chiziq — narx tegib qaytgan joy'], en:['Wick','Line beyond the body — price reached then retreated']},
+    {cat:'Pattern', uz:['Engulfing','Ikkinchi tana birinchini to\'liq qoplaydi. Reversal'], en:['Engulfing','Second body fully covers the first. Reversal']},
+    {cat:'Pattern', uz:['Pinbar','Uzun fitil + kichik tana. Hammer / Shooting Star'], en:['Pinbar','Long wick + small body. Hammer / Shooting Star']},
+    {cat:'Indikator', uz:['EMA20','20 davrli eksponensial o\'rtacha — dinamik support'], en:['EMA20','20-period EMA — dynamic support']},
+    {cat:'Indikator', uz:['VWAP','Hajm bilan o\'rtacha narx — institutsional benchmark'], en:['VWAP','Volume weighted average price — institutional benchmark']},
+    {cat:'Indikator', uz:['RSI','Kuch indeksi 0-100. 70+ overbought, 30- oversold'], en:['RSI','Strength index 0-100. 70+ overbought, 30- oversold']},
+    {cat:'Indikator', uz:['ATR','Volatillik o\'lchovi — SL masofasi uchun'], en:['ATR','Volatility measure — for SL distance']},
+    {cat:'Trend', uz:['Higher High / Lower Low','Uptrend: HH+HL. Downtrend: LH+LL'], en:['Higher High / Lower Low','Uptrend: HH+HL. Downtrend: LH+LL']},
+    {cat:'Trend', uz:['Zona','Narx reaksiya qiladigan oraliq, aniq chiziq emas'], en:['Zone','A range where price reacts, not an exact line']},
+    {cat:'Trend', uz:['Supply / Demand','Yirik sotuvchi / xaridor buyurtmalari to\'plangan zona'], en:['Supply / Demand','Zones of clustered seller / buyer orders']},
+    {cat:'Harakat', uz:['Pullback','Trend davomidagi vaqtinchalik qaytish'], en:['Pullback','A temporary pause against the trend']},
+    {cat:'Harakat', uz:['Breakout / Fakeout','Sindirish / soxta sindirish (volume bilan tekshiring)'], en:['Breakout / Fakeout','A break / a false break (check volume)']},
+    {cat:'Harakat', uz:['Chasing','Cho\'qqida kirish — yomon. Pullback kuting'], en:['Chasing','Entering at the top — bad. Wait for a pullback']},
+    {cat:'Risk', uz:['Stop Loss','Zararni cheklash buyrug\'i. Hech qachon olib tashlamang'], en:['Stop Loss','Caps your loss. Never remove it']},
+    {cat:'Risk', uz:['R:R','Risk/mukofot nisbati — kamida 1:2'], en:['R:R','Risk-to-reward — at least 1:2']},
+    {cat:'Risk', uz:['Break-even win rate','R:R bo\'yicha foydaga chiqish uchun minimal yutuq foizi'], en:['Break-even win rate','Min win rate to break even at a given R:R']},
+    {cat:'Risk', uz:['Profit factor','Jami yutuq ÷ jami zarar. 1 dan yuqori = foydali'], en:['Profit factor','Gross win ÷ gross loss. Above 1 = profitable']},
+    {cat:'Risk', uz:['Averaging down','Zararда qo\'shish — XAVFLI, qilmang'], en:['Averaging down','Adding to a loser — DANGEROUS']},
+    {cat:'Risk', uz:['Drawdown','Hisobning eng yuqori nuqtadan tushishi'], en:['Drawdown','Drop from the account peak']},
+    {cat:'Risk', uz:['Scaling in/out','Pozitsiyani bo\'lib ochish/yopish (TP1/TP2/TP3)'], en:['Scaling in/out','Entering/exiting in parts (TP1/TP2/TP3)']},
+    {cat:'Bozor', uz:['SPY / QQQ','S&P 500 / Nasdaq 100 — bozor termometri'], en:['SPY / QQQ','S&P 500 / Nasdaq 100 — market thermometer']},
+    {cat:'Bozor', uz:['Gap down','Pastroq ochilish — Stop Loss ushlay olmaydi'], en:['Gap down','Opens lower — a stop loss can\'t catch it']},
+    {cat:'Bozor', uz:['Stop hunt','Yiriklar SL\'larni ataylab ishga tushiradi'], en:['Stop hunt','Big players trigger stops on purpose']},
+    {cat:'Bozor', uz:['Liquid / Penny','Likvid: oson sotiladi. Penny: arzon, xavfli'], en:['Liquid / Penny','Liquid: trades easily. Penny: cheap, risky']},
+    {cat:'Bozor', uz:['Volatility','Narxning qancha tez/keskin o\'zgarishi'], en:['Volatility','How fast/sharply price moves']},
+    {cat:'Bozor', uz:['Confluence','Bir nechta signal birga kelishi (kuchli savdo)'], en:['Confluence','Several signals aligning (a strong setup)']},
+    {cat:'Bozor', uz:['Multi-timeframe','Bir aksiyani turli TF\'da ko\'rish'], en:['Multi-timeframe','Viewing one asset across timeframes']},
+  ];
+  let filterVal='';
   function renderGlossary(q){
-    const l = lang(); filterVal = q||'';
-    const ql = filterVal.toLowerCase();
+    const l=lang(); filterVal=q||''; const ql=filterVal.toLowerCase();
     document.getElementById('glossaryList').innerHTML = glossary.map(g=>{
-      const [t,d] = g[l];
-      const match = !ql || t.toLowerCase().includes(ql) || d.toLowerCase().includes(ql) || g.cat.toLowerCase().includes(ql);
+      const [t,d]=g[l];
+      const match=!ql||t.toLowerCase().includes(ql)||d.toLowerCase().includes(ql)||g.cat.toLowerCase().includes(ql);
       return `<div class="term ${match?'':'hidden'}"><dt>${t}<span class="cat">${g.cat}</span></dt><dd>${d}</dd></div>`;
     }).join('');
   }
-  document.getElementById('glossarySearch').addEventListener('input', e=>renderGlossary(e.target.value));
+  document.getElementById('glossarySearch').addEventListener('input',e=>renderGlossary(e.target.value));
 
-  // ===== Quiz =====
+  // Quiz
   const quizData = [
-    { uz:['Narx eng yuqori nuqtada (cho\'qqida). Nima qilasiz?',['Darrov long olaman','Pullback (EMA20/VWAP) kutaman','Ko\'proq sotib olaman','Stop loss\'ni olib tashlayman'],1,'Cho\'qqida kirish = chasing. Pullback\'ni kutib, arzonroq va xavfsizroq kiring.'],
-      en:['Price is at the very top. What do you do?',['Go long immediately','Wait for a pullback (EMA20/VWAP)','Buy even more','Remove my stop loss'],1,'Entering at the top is chasing. Wait for a pullback to enter cheaper and safer.'] },
-    { uz:['Savdongiz zararда. To\'g\'ri harakat qaysi?',['Pozitsiyaga qo\'shaman (averaging down)','Stop loss\'ni pastga ko\'chiraman','SL\'ga tegsa chiqaman','SL\'ni olib tashlayman'],2,'Hech qachon zararда qo\'shmang yoki SL\'ni olib tashlamang. Rejaga rioya qiling.'],
-      en:['Your trade is losing. The correct action?',['Add to the position (average down)','Move my stop loss lower','Exit if it hits my SL','Remove my stop loss'],2,'Never average down or remove your SL. Stick to the plan.'] },
-    { uz:['Engulfing haqiqiy bo\'lishi uchun nima shart?',['Faqat rang qarama-qarshi','Ikkinchi TANA birinchini to\'liq qoplaydi','Fitillar bir xil','Volume past'],1,'Faqat tana hisoblanadi (fitil emas). To\'liq qoplamasa — engulfing emas.'],
-      en:['What makes an engulfing valid?',['Just opposite colors','The second BODY fully covers the first','Equal wicks','Low volume'],1,'Only the body counts (not wicks). If it doesn\'t fully cover, it isn\'t engulfing.'] },
-    { uz:['R:R nima va minimal qancha bo\'lishi kerak?',['Risk/mukofot, kamida 1:2','Foiz stavkasi, 5%','Volume nisbati, 1:1','Trend kuchi, 70'],0,'R:R kamida 1:2 — yutuq yo\'qotishdan 2x katta bo\'lsin. 40% win rate ham foydali.'],
-      en:['What is R:R and the minimum?',['Risk/reward, at least 1:2','Interest rate, 5%','Volume ratio, 1:1','Trend strength, 70'],0,'R:R at least 1:2 — wins twice the size of losses. Profitable even at 40% win rate.'] },
-    { uz:['Long olishdan oldin nimani tekshirasiz?',['Faqat aksiya narxini','SPY/QQQ (bozor yo\'nalishi)','Eng arzon penny stock','Tungi yangilikni'],1,'Bozor (SPY/QQQ) yo\'nalishini tekshiring. Bozorga qarshi savdo qilmang.'],
-      en:['Before going long, what do you check?',['Just the stock price','SPY/QQQ (market direction)','The cheapest penny stock','Tonight\'s news only'],1,'Check market direction (SPY/QQQ). Don\'t trade against the market.'] },
+    {uz:['Narx cho\'qqida. Nima qilasiz?',['Darrov long olaman','Pullback (EMA20/VWAP) kutaman','Ko\'proq sotib olaman','SL\'ni olib tashlayman'],1,'Cho\'qqida kirish = chasing. Pullback kuting.'],en:['Price at the top. What do you do?',['Go long now','Wait for a pullback','Buy more','Remove SL'],1,'Entering at the top is chasing. Wait for a pullback.']},
+    {uz:['Savdo zararда. To\'g\'ri harakat?',['Averaging down','SL\'ni pastga ko\'chiraman','SL\'ga tegsa chiqaman','SL\'ni olib tashlayman'],2,'Hech qachon zararда qo\'shmang yoki SL\'ni olib tashlamang.'],en:['Trade is losing. Correct move?',['Average down','Move SL lower','Exit if SL hit','Remove SL'],2,'Never average down or remove your SL.']},
+    {uz:['Engulfing haqiqiy bo\'lishi sharti?',['Faqat rang qarama-qarshi','Ikkinchi TANA birinchini qoplaydi','Fitillar bir xil','Volume past'],1,'Faqat tana hisoblanadi, fitil emas.'],en:['What makes engulfing valid?',['Opposite colors only','Second BODY covers first','Equal wicks','Low volume'],1,'Only the body counts, not wicks.']},
+    {uz:['R:R 1:3 da break-even win rate qancha?',['~50%','~25%','~75%','~10%'],1,'1/(1+3)=25%. Yuqori R:R = past win rate yetarli.'],en:['Break-even win rate at R:R 1:3?',['~50%','~25%','~75%','~10%'],1,'1/(1+3)=25%. Higher R:R needs a lower win rate.']},
+    {uz:['Long oldidan nimani tekshirasiz?',['Faqat narxni','SPY/QQQ yo\'nalishini','Eng arzon penny stock','Tungi yangilikni'],1,'Bozor (SPY/QQQ) yo\'nalishini tekshiring.'],en:['Before going long, check what?',['Just price','SPY/QQQ direction','Cheapest penny stock','Tonight\'s news'],1,'Check market direction (SPY/QQQ).']},
+    {uz:['Profit factor 1.5 nimani anglatadi?',['Har $1 zararга $1.5 yutuq','50% win rate','1.5 savdo/kun','R:R 1:1.5'],0,'Profit factor = jami yutuq ÷ jami zarar. 1 dan yuqori = foydali.'],en:['Profit factor 1.5 means?',['$1.5 won per $1 lost','50% win rate','1.5 trades/day','R:R 1:1.5'],0,'Profit factor = gross win ÷ gross loss. Above 1 = profitable.']},
   ];
-  let qIdx = 0, qAnswered = false;
+  let qIdx=0,qAnswered=false;
   function renderQuiz(){
-    const l = lang(), q = quizData[qIdx];
-    const [question, opts, correct, explain] = q[l];
-    document.getElementById('quizQ').textContent = question;
-    document.getElementById('quizProg').textContent = (qIdx+1)+' / '+quizData.length;
-    const ex = document.getElementById('quizExplain'); ex.textContent = explain; ex.classList.remove('show');
-    document.getElementById('quizNext').disabled = true;
-    qAnswered = false;
-    document.getElementById('quizOpts').innerHTML = opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQuiz(${i},${correct})">${o}</button>`).join('');
+    const l=lang(),q=quizData[qIdx],[question,opts,correct,explain]=q[l];
+    document.getElementById('quizQ').textContent=question;
+    document.getElementById('quizProg').textContent=(qIdx+1)+' / '+quizData.length;
+    const ex=document.getElementById('quizExplain'); ex.textContent=explain; ex.classList.remove('show');
+    document.getElementById('quizNext').disabled=true; qAnswered=false;
+    document.getElementById('quizOpts').innerHTML=opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQuiz(${i},${correct})">${o}</button>`).join('');
   }
-  function answerQuiz(i, correct){
-    if(qAnswered) return; qAnswered = true;
-    const btns = document.querySelectorAll('.quiz-opt');
-    btns.forEach((b,j)=>{ b.disabled=true; if(j===correct) b.classList.add('correct'); if(j===i&&i!==correct) b.classList.add('wrong'); });
+  function answerQuiz(i,correct){
+    if(qAnswered)return; qAnswered=true;
+    document.querySelectorAll('.quiz-opt').forEach((b,j)=>{b.disabled=true; if(j===correct)b.classList.add('correct'); if(j===i&&i!==correct)b.classList.add('wrong');});
     document.getElementById('quizExplain').classList.add('show');
-    document.getElementById('quizNext').disabled = false;
+    document.getElementById('quizNext').disabled=false;
   }
   function nextQuiz(){ qIdx=(qIdx+1)%quizData.length; renderQuiz(); document.getElementById('quiz').scrollIntoView({behavior:'smooth',block:'start'}); }
 
-  // ===== Rules =====
+  // Rules
   const rules = [
-    ['Intizom 80%, texnika 20% — har doim','Discipline is 80%, technique 20% — always'],
+    ['Intizom 80%, texnika 20% — har doim','Discipline 80%, technique 20% — always'],
     ['Har doim Stop Loss qo\'ying, hech qachon olib tashlamang','Always set a stop loss, never remove it'],
-    ['Hech qachon averaging down qilmang (zararда qo\'shmang)','Never average down (don\'t add to losers)'],
+    ['Hech qachon averaging down qilmang','Never average down'],
     ['R:R kamida 1:2 bo\'lsin','Keep R:R at least 1:2'],
     ['Trendga qarshi savdo qilmang','Never trade against the trend'],
     ['Cho\'qqida kirmang — pullback kuting','Don\'t chase the top — wait for a pullback'],
-    ['Bir vaqtда bitta pozitsiya — boshqarish oson','One position at a time — easy to manage'],
+    ['Bir vaqtда bitta pozitsiya','One position at a time'],
     ['Likvid aksiya savdo qiling, penny stock emas','Trade liquid stocks, not penny stocks'],
     ['Kun oxirida pozitsiyani yoping — gap xavfi','Close before the day ends — gap risk'],
-    ['Bitta texnikani mukammal qiling, 10 tasini yuzaki emas','Master one technique, not ten shallowly'],
+    ['Har savdoni jurnalga yozing','Log every trade in your journal'],
   ];
   function renderRules(){
-    const l = lang()==='en'?1:0;
-    document.getElementById('rulesList').innerHTML = rules.map((r,i)=>`<div class="rule"><span class="n">${i+1}</span><p><b>${r[l]}</b></p></div>`).join('');
+    const l=lang()==='en'?1:0;
+    document.getElementById('rulesList').innerHTML=rules.map((r,i)=>`<div class="rule"><span class="n">${i+1}</span><p><b>${r[l]}</b></p></div>`).join('');
   }
 
-  // ===== Init =====
-  renderTech(); renderGlossary(''); renderQuiz(); renderRules(); calc();
+  // Init
+  loadTrades();
+  renderTech(); renderGlossary(''); renderQuiz(); renderRules(); renderConf(); calc(); calcBE(); renderJournal(); updateClock();
 </script>
 </body>
 </html>
