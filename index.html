@@ -87,6 +87,40 @@
   .tag.low { background: var(--green-soft); color: var(--green); }
   .tag.mid { background: var(--amber-soft); color: var(--amber); }
   .tag.high { background: var(--red-soft); color: var(--red); }
+  .card { cursor: pointer; position: relative; }
+  .card .more { font-family: var(--mono); font-size: 11.5px; color: var(--blue); font-weight: 600; margin-top: 12px; display: inline-block; }
+
+  /* Technique modal */
+  .modal-backdrop { position: fixed; inset: 0; background: rgba(20,24,31,0.5); backdrop-filter: blur(3px); z-index: 100; display: none; align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto; }
+  .modal-backdrop.open { display: flex; }
+  .modal { background: var(--surface); border-radius: 18px; max-width: 720px; width: 100%; box-shadow: 0 20px 60px rgba(20,24,31,0.25); overflow: hidden; }
+  .modal-head { padding: 24px 28px 18px; border-bottom: 1px solid var(--line); display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .modal-head .mh-num { font-family: var(--mono); font-size: 12px; color: var(--ink-faint); font-weight: 600; }
+  .modal-head h3 { font-size: 23px; margin-top: 4px; letter-spacing: -0.02em; }
+  .modal-close { background: var(--bg); border: 1px solid var(--line); width: 34px; height: 34px; border-radius: 9px; cursor: pointer; font-size: 17px; color: var(--ink-soft); flex-shrink: 0; line-height: 1; }
+  .modal-close:hover { border-color: var(--red); color: var(--red); }
+  .modal-body { padding: 24px 28px 28px; }
+  .chart-box { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 14px; margin-bottom: 22px; }
+  .chart-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; padding: 0 4px; }
+  .chart-legend span { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); display: flex; align-items: center; gap: 5px; }
+  .chart-legend .dot { width: 9px; height: 9px; border-radius: 3px; }
+  .rules-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 22px; }
+  .rule-cell { padding: 14px; border-radius: 11px; }
+  .rule-cell.entry { background: var(--blue-soft); }
+  .rule-cell.sl { background: var(--red-soft); }
+  .rule-cell.tp { background: var(--green-soft); }
+  .rule-cell .rc-label { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700; margin-bottom: 5px; }
+  .rule-cell.entry .rc-label { color: var(--blue); }
+  .rule-cell.sl .rc-label { color: var(--red); }
+  .rule-cell.tp .rc-label { color: var(--green); }
+  .rule-cell .rc-text { font-size: 12.5px; color: var(--ink); line-height: 1.45; }
+  .detail-block { margin-bottom: 18px; }
+  .detail-block .db-title { font-size: 13px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 7px; }
+  .detail-block .db-title .ic { width: 18px; height: 18px; border-radius: 5px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; }
+  .detail-block p { font-size: 13.5px; color: var(--ink-soft); }
+  .example-box { background: var(--bg); border-left: 3px solid var(--blue); border-radius: 0 10px 10px 0; padding: 14px 16px; font-size: 13.5px; line-height: 1.6; }
+  .example-box b { color: var(--ink); }
+  .mistake-box { background: var(--red-soft); border-radius: 10px; padding: 14px 16px; font-size: 13.5px; color: #8a2820; line-height: 1.55; }
 
   .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); }
   .panel + .panel { margin-top: 20px; }
@@ -421,6 +455,21 @@
 
 </main>
 
+<!-- TECHNIQUE MODAL -->
+<div class="modal-backdrop" id="techModal" onclick="if(event.target===this)closeTech()">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="mh-num" id="mhNum"></div>
+        <h3 id="mhTitle"></h3>
+        <span class="tag" id="mhTag"></span>
+      </div>
+      <button class="modal-close" onclick="closeTech()">✕</button>
+    </div>
+    <div class="modal-body" id="mhBody"></div>
+  </div>
+</div>
+
 <footer>
   <div class="brand"><span class="tick"></span> Trading Maktabi</div>
   <p class="lang-uz">Pro trader toolkit · Ta'lim maqsadida · Investitsiya maslahati emas</p>
@@ -468,26 +517,194 @@
       c.innerHTML=`<div class="wick" style="height:${w}px"></div><div class="body" style="height:${b}px"></div><div class="wick" style="height:${Math.round(w*0.6)}px"></div>`; el.appendChild(c); });
   })();
 
-  // Techniques
+  // ===== Chart renderer (candlestick SVG) =====
+  function techChart(spec){
+    const W=440,H=240,padT=16,padB=16,padL=10,padR=82;
+    const cs=spec.candles; let prices=[];
+    cs.forEach(c=>{prices.push(c[1],c[2]);});
+    (spec.line||[]).forEach(p=>prices.push(p));
+    (spec.zones||[]).forEach(z=>{prices.push(z.from,z.to);});
+    (spec.levels||[]).forEach(z=>prices.push(z.price));
+    (spec.markers||[]).forEach(m=>prices.push(m.price));
+    let min=Math.min(...prices),max=Math.max(...prices);
+    const pd=(max-min)*0.10||1; min-=pd; max+=pd;
+    const ph=H-padT-padB,pw=W-padL-padR;
+    const y=p=>padT+ph*(1-(p-min)/(max-min));
+    const n=cs.length,cw=pw/n,cx=i=>padL+cw*(i+0.5);
+    let s='';
+    (spec.zones||[]).forEach(z=>{ const y1=y(z.to),y2=y(z.from);
+      s+=`<rect x="${padL}" y="${y1}" width="${pw}" height="${y2-y1}" fill="${z.color}" opacity="0.14"/>`;
+      s+=`<line x1="${padL}" y1="${y1}" x2="${padL+pw}" y2="${y1}" stroke="${z.color}" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>`;
+      s+=`<line x1="${padL}" y1="${y2}" x2="${padL+pw}" y2="${y2}" stroke="${z.color}" stroke-width="0.8" stroke-dasharray="3 2" opacity="0.5"/>`;
+      if(z.label) s+=`<text x="${padL+pw+4}" y="${(y1+y2)/2+3}" font-size="9.5" fill="${z.color}" font-family="ui-monospace,Menlo,monospace" font-weight="600">${z.label}</text>`;});
+    if(spec.line){ const pts=spec.line.map((p,i)=>`${cx(i)},${y(p)}`).join(' ');
+      s+=`<polyline points="${pts}" fill="none" stroke="${spec.lineColor||'#1F5FA8'}" stroke-width="2" stroke-dasharray="${spec.lineDash||'0'}"/>`;
+      if(spec.lineLabel){const li=spec.line.length-1; s+=`<text x="${cx(li)+5}" y="${y(spec.line[li])+3}" font-size="9.5" fill="${spec.lineColor||'#1F5FA8'}" font-family="ui-monospace,Menlo,monospace" font-weight="600">${spec.lineLabel}</text>`;}}
+    cs.forEach((c,i)=>{ const [o,h,lo,cl]=c; const up=cl>=o; const col=up?'#1A8A66':'#C0392F';
+      const xc=cx(i),bw=Math.max(cw*0.5,3);
+      s+=`<line x1="${xc}" y1="${y(h)}" x2="${xc}" y2="${y(lo)}" stroke="${col}" stroke-width="1.3"/>`;
+      const yo=y(o),yc=y(cl),top=Math.min(yo,yc),bh=Math.max(Math.abs(yc-yo),1.6);
+      s+=`<rect x="${xc-bw/2}" y="${top}" width="${bw}" height="${bh}" fill="${col}" rx="0.8"/>`;});
+    (spec.levels||[]).forEach(z=>{ const yy=y(z.price);
+      s+=`<line x1="${padL}" y1="${yy}" x2="${padL+pw}" y2="${yy}" stroke="${z.color}" stroke-width="1.3" stroke-dasharray="5 3"/>`;
+      s+=`<text x="${padL+pw+4}" y="${yy+3}" font-size="9.5" fill="${z.color}" font-family="ui-monospace,Menlo,monospace" font-weight="600">${z.label}</text>`;});
+    (spec.markers||[]).forEach(m=>{ const xc=cx(m.i!=null?m.i:n-1),yy=y(m.price);
+      const colors={entry:'#1F5FA8',sl:'#C0392F',tp:'#1A8A66'},col=colors[m.type]||'#14181F';
+      s+=`<circle cx="${xc}" cy="${yy}" r="4.5" fill="${col}" stroke="#fff" stroke-width="1.5"/>`;
+      s+=`<text x="${xc+8}" y="${yy+3.5}" font-size="9.5" fill="${col}" font-family="ui-monospace,Menlo,monospace" font-weight="700">${m.label}</text>`;});
+    return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="${spec.aria||'setup chart'}">${s}</svg>`;
+  }
+
+  // ===== Techniques (detailed) =====
   const techniques = [
-    {num:'01',risk:'low',uz:['VWAP Bounce','Uptrendда narx VWAP\'ga qaytib, qaytganda kirish.','Kirish: bounce shami · SL: swing low · TP: 1:2'],en:['VWAP Bounce','In an uptrend, enter when price pulls back to VWAP and bounces.','Entry: bounce candle · SL: swing low · TP: 1:2']},
-    {num:'02',risk:'low',uz:['EMA20 Pullback','Uptrendда narx EMA20\'ga tegib qaytganда kirish.','Kirish: yashil sham · SL: EMA20 ostidan · TP: 1:2'],en:['EMA20 Pullback','Enter when price touches EMA20 and bounces in an uptrend.','Entry: green candle · SL: below EMA20 · TP: 1:2']},
-    {num:'03',risk:'mid',uz:['S/R Zona Bounce','Kuchli daraja (zona)dan qaytganда kirish.','Zona = oraliq · SL: zona tashqarisiga · TP: keyingi zona'],en:['S/R Zone Bounce','Enter on a reversal from a strong level (zone).','Zone = a range · SL: outside zone · TP: next zone']},
-    {num:'04',risk:'mid',uz:['ORB','Ertalabki 15-30 daq oralig\'ini sindirish.','Volume bilan tasdiq · fakeout xavfi · faqat ochilishда'],en:['ORB','Break the first 15-30 min opening range.','Confirm with volume · fakeout risk · mornings only']},
-    {num:'05',risk:'mid',uz:['Breakout + Retest','Sindirilgach, retest\'da kirish — ishonchli.','Retest fakeout\'ni filtrlaydi · SL: retest ostiga'],en:['Breakout + Retest','Enter on the retest after a break — reliable.','Retest filters fakeouts · SL: below the retest']},
-    {num:'06',risk:'high',uz:['Momentum / Gap-and-Go','Yangilik/gap harakatiga qo\'shilish. Tajriba kerak.','Tez, volatil · qattiq SL · kichik pozitsiya'],en:['Momentum / Gap-and-Go','Ride a news/gap move. Needs experience.','Fast, volatile · tight SL · small size']},
-    {num:'07',risk:'mid',uz:['Multi-Timeframe','Katta TF trend + kichik TF kirish.','H1/H4: yo\'nalish · M5/M15: aniq kirish nuqtasi'],en:['Multi-Timeframe','Higher TF trend + lower TF entry.','H1/H4: direction · M5/M15: precise entry']},
-    {num:'08',risk:'high',uz:['Supply/Demand','Yirik buyurtmalar to\'plangan zonalar.','Demand: xaridorlar · Supply: sotuvchilar · toza zona kuchli'],en:['Supply/Demand','Zones where large orders cluster.','Demand: buyers · Supply: sellers · fresh zones are stronger']},
-    {num:'09',risk:'mid',uz:['Scaling Out','Foydani bo\'lib olish: TP1/TP2/TP3.','50% TP1 · 25% TP2 · qolgan trail · stressni kamaytiradi'],en:['Scaling Out','Take profit in parts: TP1/TP2/TP3.','50% at TP1 · 25% at TP2 · trail rest · lowers stress']},
+    {num:'01',risk:'low',
+      uz:['VWAP Bounce','Uptrendда narx VWAP\'ga qaytib, undan qaytganда kirish.'],
+      en:['VWAP Bounce','In an uptrend, enter when price pulls back to VWAP and bounces off it.'],
+      chart:{candles:[[99,99.6,98.8,99.5],[99.5,100.2,99.4,100.1],[100.1,100.8,100,100.7],[100.7,101,100.3,100.5],[100.5,100.7,99.9,100],[100,100.2,99.5,99.7],[99.7,100.6,99.6,100.5],[100.5,101.3,100.4,101.2],[101.2,101.9,101,101.8],[101.8,102.8,101.7,102.7]],
+        line:[98.9,99.1,99.25,99.4,99.5,99.55,99.6,99.7,99.85,100],lineColor:'#1F5FA8',lineDash:'5 3',lineLabel:'VWAP',
+        markers:[{i:6,price:100.5,type:'entry',label:'Kirish 100.5'},{i:5,price:99.4,type:'sl',label:'SL 99.4'},{i:9,price:102.7,type:'tp',label:'TP 102.7'}]},
+      entry:['VWAP\'ga tushib, bounce qiluvchi bullish sham yopilganда','When a bullish candle closes after bouncing off VWAP'],
+      sl:['Swing low / VWAP ostidan biroz past','Just below the swing low / VWAP'],
+      tp:['Oldingi cho\'qqi yoki R:R 1:2','The prior high or R:R 1:2'],
+      example:['AAPL uptrendда, VWAP ≈ 99.6. Narx VWAP\'ga tushadi, bullish sham <b>100.5</b> da yopiladi → kirish. SL <b>99.4</b> (risk 1.1). TP <b>102.7</b> (1:2).','AAPL uptrend, VWAP ≈ 99.6. Price dips to VWAP, a bullish candle closes at <b>100.5</b> → entry. SL <b>99.4</b> (risk 1.1). TP <b>102.7</b> (1:2).'],
+      mistake:['VWAP\'ni teshib o\'tayotганда, tasdiq shamисиз kirish (tushayotган pichoqни ushlash).','Entering before a confirmation candle while price is slicing through VWAP (catching a falling knife).']},
+
+    {num:'02',risk:'low',
+      uz:['EMA20 Pullback','Kuchli uptrendда narx ko\'tarilayotган EMA20\'ga tegib qaytганда kirish.'],
+      en:['EMA20 Pullback','In a strong uptrend, enter when price retraces to the rising EMA20 and bounces.'],
+      chart:{candles:[[50,50.5,49.8,50.4],[50.4,51,50.3,50.9],[50.9,51.4,50.7,51.1],[51.1,51.3,50.6,50.8],[50.8,51,50.4,50.6],[50.6,51.2,50.5,51.1],[51.1,51.7,51,51.6],[51.6,52.1,51.4,52],[52,52.6,51.9,52.5]],
+        line:[49.9,50.2,50.4,50.5,50.55,50.6,50.8,51,51.3],lineColor:'#B07A14',lineDash:'0',lineLabel:'EMA20',
+        markers:[{i:5,price:51.1,type:'entry',label:'Kirish 51.1'},{i:4,price:50.3,type:'sl',label:'SL 50.3'},{i:8,price:52.5,type:'tp',label:'TP 52.5'}]},
+      entry:['EMA20\'ga tegib qaytган yashil sham yopilganда','When a green candle closes off the EMA20 touch'],
+      sl:['EMA20 / swing low ostidan','Below the EMA20 / swing low'],
+      tp:['Trend davomi yoki R:R 1:2','Trend continuation or R:R 1:2'],
+      example:['NVDA kuchli trendда. Narx EMA20 (≈50.6)ga tushadi, yashil sham <b>51.1</b> da yopiladi → kirish. SL <b>50.3</b> (risk 0.8). TP <b>52.7</b> (1:2).','NVDA in a strong trend. Price dips to EMA20 (≈50.6), a green candle closes at <b>51.1</b> → entry. SL <b>50.3</b> (risk 0.8). TP <b>52.7</b> (1:2).'],
+      mistake:['EMA20\'ни yon (sideways/choppy) bozorда ishlatish — u yerда signal ishonchsiz.','Using EMA20 in a choppy/sideways market — the signal is unreliable there.']},
+
+    {num:'03',risk:'mid',
+      uz:['S/R Zona Bounce','Narx sinab ko\'rilgan support zonaga yetиб, undan qaytганда kirish.'],
+      en:['S/R Zone Bounce','Enter when price reaches a tested support zone and reverses.'],
+      chart:{candles:[[103,103.2,102.4,102.6],[102.6,102.8,101.9,102.1],[102.1,102.3,101.3,101.5],[101.5,101.6,100.7,100.9],[100.9,101,100.4,100.6],[100.6,101.5,100.5,101.4],[101.4,102.1,101.3,102],[102,102.7,101.9,102.6],[102.6,103.3,102.5,103.2]],
+        zones:[{from:100.3,to:101,color:'#1A8A66',label:'Support zona'}],
+        markers:[{i:5,price:101.4,type:'entry',label:'Kirish 101.4'},{i:4,price:100.2,type:'sl',label:'SL 100.2'},{i:8,price:103.2,type:'tp',label:'TP 103.2'}]},
+      entry:['Zona ichida tasdiqlovchi bullish sham','A confirming bullish candle inside the zone'],
+      sl:['Zona tashqarisiga (ostidan past)','Outside the zone (below it)'],
+      tp:['Keyingi resistance zona yoki R:R 1:2','The next resistance zone or R:R 1:2'],
+      example:['Support zona <b>100.3–101.0</b>. Narx zonaga kiradi, bullish sham <b>101.4</b> da yopiladi → kirish. SL <b>100.2</b> (zona ostida). TP <b>103.2</b> (keyingi zona).','Support zone <b>100.3–101.0</b>. Price enters the zone, a bullish candle closes at <b>101.4</b> → entry. SL <b>100.2</b> (below zone). TP <b>103.2</b> (next zone).'],
+      mistake:['Zonani aniq chiziq deb qarash va SL\'ni zona ichiga juda yaqin qo\'yish → stop hunt sizni urib chiqaradi.','Treating the zone as an exact line and placing the SL too tight inside it → a stop hunt knocks you out.']},
+
+    {num:'04',risk:'mid',
+      uz:['ORB — Opening Range Breakout','Ertalabki birinchi 15–30 daqiqa oralig\'ini (high/low) sindirганда kirish.'],
+      en:['ORB — Opening Range Breakout','Enter when price breaks the first 15–30 min opening range (its high/low).'],
+      chart:{candles:[[100,100.6,99.7,100.4],[100.4,100.8,99.9,100.1],[100.1,100.7,99.8,100.5],[100.5,100.8,100,100.2],[100.2,100.7,100.1,100.6],[100.6,101.4,100.5,101.3],[101.3,101.9,101.2,101.8],[101.8,102.4,101.6,102.3]],
+        levels:[{price:100.8,color:'#1F5FA8',label:'Range High'},{price:99.7,color:'#9AA3B2',label:'Range Low'}],
+        markers:[{i:5,price:101,type:'entry',label:'Kirish 101'},{i:4,price:100,type:'sl',label:'SL 100'},{i:7,price:102.3,type:'tp',label:'TP 102.3'}]},
+      entry:['Range high\'ni volume bilan sindirib o\'tганда (long)','When price breaks the range high with volume (long)'],
+      sl:['Range ichiga (o\'rtasi yoki teskari tomon)','Inside the range (mid or opposite side)'],
+      tp:['Range balandligini proyeksiya qilish yoki 1:2','Project the range height, or 1:2'],
+      example:['Birinchi 30 daq: high <b>100.8</b>, low <b>99.7</b>. Narx <b>101</b> da volume bilan sindiradi → kirish. SL <b>100</b>. TP <b>102.3</b> (range balandligi ≈1.1 × 1.2).','First 30 min: high <b>100.8</b>, low <b>99.7</b>. Price breaks <b>101</b> with volume → entry. SL <b>100</b>. TP <b>102.3</b> (range height ≈1.1 projected).'],
+      mistake:['Har sindirишда kirish (volume tasdiqисиз) — ko\'p ORB sindirishlари fakeout bo\'ladi.','Trading every break without volume confirmation — many ORB breaks are fakeouts.']},
+
+    {num:'05',risk:'mid',
+      uz:['Breakout + Retest','Daraja sindirilgach, narx qaytib o\'sha darajani test qilганда (endi support) kirish.'],
+      en:['Breakout + Retest','After a level breaks, enter when price returns to retest it (now support).'],
+      chart:{candles:[[99.5,99.8,99.1,99.3],[99.3,99.7,99,99.6],[99.6,100.1,99.5,100],[100,101,99.9,100.9],[100.9,101.2,100.4,100.6],[100.6,100.8,100.1,100.3],[100.3,100.9,100.2,100.8],[100.8,101.6,100.7,101.5],[101.5,102.2,101.4,102.1]],
+        levels:[{price:100.1,color:'#1F5FA8',label:'Sindirilgan daraja'}],
+        markers:[{i:6,price:100.4,type:'entry',label:'Kirish 100.4'},{i:5,price:99.9,type:'sl',label:'SL 99.9'},{i:8,price:102.1,type:'tp',label:'TP 102.1'}]},
+      entry:['Retestда narx darajaдан qaytган tasdiq shami','A confirmation candle as price bounces off the retest'],
+      sl:['Retest pastligi / daraja ostidan','Below the retest low / the level'],
+      tp:['O\'lchangan harakat yoki R:R 1:2','Measured move or R:R 1:2'],
+      example:['Resistance <b>100.1</b> sindiriladi. Narx qaytib <b>100.3</b> gача test qiladi, qaytadi → kirish <b>100.4</b>. SL <b>99.9</b>. TP <b>102.1</b> (1:2+).','Resistance <b>100.1</b> breaks. Price returns to retest <b>100.3</b>, bounces → entry <b>100.4</b>. SL <b>99.9</b>. TP <b>102.1</b> (1:2+).'],
+      mistake:['Birinchi sindирish shamиni quvib kirish (chasing) — retest\'ни kutmaslik ko\'pincha cho\'qqида kirишга olib keladi.','Chasing the first breakout candle instead of waiting for the retest — often means buying the top.']},
+
+    {num:'06',risk:'high',
+      uz:['Momentum / Gap-and-Go','Kuchli yangilik/gap bilan ochilган harakatга qo\'shilish. Tez va volatil.'],
+      en:['Momentum / Gap-and-Go','Ride a strong move opened by news or a gap. Fast and volatile.'],
+      chart:{candles:[[98,98.3,97.8,98.1],[98.1,98.4,97.9,98.2],[101,101.8,100.8,101.6],[101.6,102.5,101.5,102.4],[102.4,103.2,102.2,103.1],[103.1,103.9,103,103.8],[103.8,104.5,103.6,104.4]],
+        levels:[{price:101.8,color:'#1F5FA8',label:'Premarket high'}],
+        markers:[{i:2,price:101.8,type:'entry',label:'Kirish 101.8'},{i:2,price:100.7,type:'sl',label:'SL 100.7'},{i:6,price:104.4,type:'tp',label:'TP scale out'}]},
+      entry:['Premarket / birinchi sham high\'ni sindирганда','On a break of the premarket / first-candle high'],
+      sl:['Qattiq — kirish shami ostiga','Tight — below the entry candle'],
+      tp:['Tez scale out (bo\'lib oling)','Scale out quickly (take partials)'],
+      example:['Aksiya yangilik bilan 98→101 gача gap. Premarket high <b>101.8</b> sindiriladi → kirish. SL <b>100.7</b> (qattiq). Foyda tez bo\'lib olinadi (scale out).','Stock gaps 98→101 on news. Premarket high <b>101.8</b> breaks → entry. SL <b>100.7</b> (tight). Take profits quickly (scale out).'],
+      mistake:['Yuqori volatилликда katta pozitsiya olish yoki cho\'zilган harakatни quvish. Kichik hajm + qattiq SL.','Taking a big position in high volatility or chasing an extended move. Use small size + a tight SL.']},
+
+    {num:'07',risk:'mid',
+      uz:['Multi-Timeframe','Katta TF (H1/H4) trendни belgilaydi, kichik TF (M5/M15) aniq kirишni beradi.'],
+      en:['Multi-Timeframe','The higher TF (H1/H4) sets the trend; the lower TF (M5/M15) times the entry.'],
+      chart:{candles:[[50,50.6,49.8,50.5],[50.5,51.2,50.4,51.1],[51.1,51.5,50.7,50.9],[50.9,51.1,50.4,50.6],[50.6,51.3,50.5,51.2],[51.2,51.9,51.1,51.8],[51.8,52.5,51.7,52.4],[52.4,53.1,52.3,53]],
+        line:[49.8,50.2,50.5,50.5,50.7,51,51.4,51.8],lineColor:'#1F5FA8',lineLabel:'H1 trend',
+        markers:[{i:3,price:50.5,type:'entry',label:'M5 kirish'},{i:3,price:50,type:'sl',label:'SL'},{i:7,price:53,type:'tp',label:'TP'}]},
+      entry:['Kichik TF setup katta TF trendи bilan bir yo\'nalишда','A lower-TF setup aligned with the higher-TF trend'],
+      sl:['Kichik TF swing low ostиdan','Below the lower-TF swing low'],
+      tp:['Katta TF keyingi darajагача','Up to the next higher-TF level'],
+      example:['H1\'da uptrend (HH+HL). M5\'ga tushib, pullback tugaганини kutasiz — M5 bullish sham <b>50.5</b> da → kirish. Katta TF yo\'nalишда savdo.','H1 in an uptrend (HH+HL). Drop to M5, wait for the pullback to end — an M5 bullish candle at <b>50.5</b> → entry. Trading in the higher-TF direction.'],
+      mistake:['Kichik TF\'da katta TF trendига QARSHI kirish — "counter-trend tuzog\'i".','Entering on the lower TF AGAINST the higher-TF trend — the "counter-trend trap".']},
+
+    {num:'08',risk:'high',
+      uz:['Supply / Demand','Narx keskин ketган (yirik buyurtmалар to\'planган) zonalardан qaytишда kirish.'],
+      en:['Supply / Demand','Enter on reactions from zones where price moved away sharply (large orders clustered).'],
+      chart:{candles:[[102,102.3,101.5,101.7],[101.7,101.9,100.9,101.1],[101.1,101.3,100.2,100.4],[100.4,100.6,100,100.5],[100.5,101.4,100.4,101.3],[101.3,102,101.2,101.9],[101.9,102.3,101.6,101.8],[101.8,102,101.5,101.6]],
+        zones:[{from:100,to:100.6,color:'#1A8A66',label:'Demand'},{from:102,to:102.6,color:'#C0392F',label:'Supply'}],
+        markers:[{i:4,price:101.3,type:'entry',label:'Kirish 101.3'},{i:3,price:99.9,type:'sl',label:'SL 99.9'},{i:5,price:102,type:'tp',label:'TP 102'}]},
+      entry:['Demand zonada (long) tasdiq bilan; supply zonaда (short)','At the demand zone (long) with confirmation; at supply (short)'],
+      sl:['Zona tashqarisiga','Beyond the zone'],
+      tp:['Qarama-qarshi zonагача','To the opposite zone'],
+      example:['Demand zona <b>100.0–100.6</b>, supply <b>102.0–102.6</b>. Narx demandga tushadi, qaytadi → kirish <b>101.3</b>. SL <b>99.9</b>. TP supply <b>102</b>.','Demand zone <b>100.0–100.6</b>, supply <b>102.0–102.6</b>. Price drops to demand, reverses → entry <b>101.3</b>. SL <b>99.9</b>. TP at supply <b>102</b>.'],
+      mistake:['Eskи, ko\'p marta sinalган zonани ishlatish — har test zonani zaiflashtiradi. Toza (fresh) zona kuchli.','Using a stale zone tested many times — each test weakens it. Fresh zones are stronger.']},
+
+    {num:'09',risk:'mid',
+      uz:['Scaling Out','Bitta kirish, foydани bosqichма-bosqich olиш: TP1 / TP2 / trail.'],
+      en:['Scaling Out','One entry, taking profit in stages: TP1 / TP2 / trail.'],
+      chart:{candles:[[100,100.4,99.8,100.3],[100.3,100.9,100.2,100.8],[100.8,101.4,100.7,101.3],[101.3,101.9,101.2,101.8],[101.8,102.5,101.7,102.4],[102.4,103.1,102.3,103],[103,103.7,102.9,103.6]],
+        levels:[{price:101.2,color:'#1A8A66',label:'TP1 (50%)'},{price:102.2,color:'#1A8A66',label:'TP2 (25%)'},{price:103.4,color:'#1A8A66',label:'Trail (25%)'}],
+        markers:[{i:0,price:100.1,type:'entry',label:'Kirish 100.1'},{i:0,price:99.4,type:'sl',label:'SL 99.4'}]},
+      entry:['Istalган texnika bilan (bu — chiqиш boshqaruvi)','With any technique (this is exit management)'],
+      sl:['Dastlаб oddiy SL, keyин break-even\'ga ko\'chиrish','Start with a normal SL, then move to break-even'],
+      tp:['50% TP1 (1:1) · 25% TP2 (1:2) · qolgан 25% trail','50% at TP1 (1:1) · 25% at TP2 (1:2) · trail the last 25%'],
+      example:['Kirish <b>100.1</b>, SL <b>99.4</b> (risk 0.7). TP1 <b>101.2</b> da 50% oling, SL\'ni break-even\'ga ko\'ching. TP2 <b>102.2</b> da yana 25%. Qolgан 25% — trend tugagunча trail.','Entry <b>100.1</b>, SL <b>99.4</b> (risk 0.7). Take 50% at TP1 <b>101.2</b>, move SL to break-even. Another 25% at TP2 <b>102.2</b>. Trail the last 25% until the trend ends.'],
+      mistake:['SL\'ni juda erta break-even\'ga ko\'chиб, shovqинда urilib chiqиш; yoki ochko\'zlik bilан hech qachон foyda olмаслик.','Moving SL to break-even too early and getting stopped on noise; or greed — never taking profit at all.']},
   ];
   function renderTech(){
     const l=lang();
-    document.getElementById('techCards').innerHTML = techniques.map(t=>{
-      const [title,desc,detail]=t[l];
+    document.getElementById('techCards').innerHTML = techniques.map((t,idx)=>{
+      const [title,desc]=t[l];
       const tg = t.risk==='low'?(l==='uz'?'Past xavf':'Low'):t.risk==='mid'?(l==='uz'?'O\'rta':'Medium'):(l==='uz'?'Yuqori':'High');
-      return `<div class="card"><div class="num">${t.num}</div><h3>${title}</h3><p>${desc}</p><div class="detail">${detail}</div><span class="tag ${t.risk}">${tg}</span></div>`;
+      const more = l==='uz'?'Batafsil + chart →':'Details + chart →';
+      return `<div class="card" onclick="openTech(${idx})"><div class="num">${t.num}</div><h3>${title}</h3><p>${desc}</p><span class="tag ${t.risk}">${tg}</span><span class="more">${more}</span></div>`;
     }).join('');
   }
+  function openTech(idx){
+    const l=lang(), t=techniques[idx], [title]=t[l];
+    const tg = t.risk==='low'?(l==='uz'?'Past xavf':'Low risk'):t.risk==='mid'?(l==='uz'?'O\'rta xavf':'Medium risk'):(l==='uz'?'Yuqori xavf':'High risk');
+    document.getElementById('mhNum').textContent = (l==='uz'?'Texnika ':'Technique ')+t.num;
+    document.getElementById('mhTitle').textContent = title;
+    const tagEl=document.getElementById('mhTag'); tagEl.className='tag '+t.risk; tagEl.textContent=tg;
+    const L = {setup:l==='uz'?'Setup (vaziyat)':'Setup',entry:l==='uz'?'Kirish':'Entry',sl:'Stop Loss',tp:l==='uz'?'Take Profit':'Take Profit',
+      ex:l==='uz'?'Misol':'Example',mis:l==='uz'?'Keng tarqalgan xato':'Common mistake',
+      leg1:l==='uz'?'Kirish':'Entry',leg2:'Stop',leg3:'Target'};
+    document.getElementById('mhBody').innerHTML = `
+      <div class="chart-box">${techChart(t.chart)}
+        <div class="chart-legend">
+          <span><span class="dot" style="background:#1F5FA8"></span>${L.leg1}</span>
+          <span><span class="dot" style="background:#C0392F"></span>${L.leg2}</span>
+          <span><span class="dot" style="background:#1A8A66"></span>${L.leg3}</span>
+        </div>
+      </div>
+      <div class="detail-block"><div class="db-title"><span class="ic" style="background:var(--blue-soft);color:var(--blue)">◔</span>${L.setup}</div><p>${t[l][1]}</p></div>
+      <div class="rules-3">
+        <div class="rule-cell entry"><div class="rc-label">${L.entry}</div><div class="rc-text">${t.entry[l==='uz'?0:1]}</div></div>
+        <div class="rule-cell sl"><div class="rc-label">${L.sl}</div><div class="rc-text">${t.sl[l==='uz'?0:1]}</div></div>
+        <div class="rule-cell tp"><div class="rc-label">${L.tp}</div><div class="rc-text">${t.tp[l==='uz'?0:1]}</div></div>
+      </div>
+      <div class="detail-block"><div class="db-title">📊 ${L.ex}</div><div class="example-box">${t.example[l==='uz'?0:1]}</div></div>
+      <div class="detail-block"><div class="db-title">⚠️ ${L.mis}</div><div class="mistake-box">${t.mistake[l==='uz'?0:1]}</div></div>
+    `;
+    document.getElementById('techModal').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeTech(){ document.getElementById('techModal').classList.remove('open'); document.body.style.overflow=''; }
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape')closeTech(); });
 
   // Position calc
   function calc(){
